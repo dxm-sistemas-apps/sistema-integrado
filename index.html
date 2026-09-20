@@ -32,8 +32,8 @@
                 </div>
             </div>
 
-            <!-- Menu Desktop -->
-            <nav class="hidden md:flex items-center space-x-1 lg:space-x-3 text-xs uppercase font-bold tracking-wider">
+            <!-- Menu Desktop (Visível apenas em telas grandes/desktops - xl em diante) -->
+            <nav class="hidden xl:flex items-center space-x-1 lg:space-x-3 text-xs uppercase font-bold tracking-wider">
                 <a href="index.html" class="px-3 py-2 rounded bg-gray-800 text-amber-400 transition"><i class="fa-solid fa-house mr-1"></i> Início</a>
                 <a href="carro.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-car mr-1"></i> RASTREABILIDADE DE CARRO</a>
                 <a href="moto.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-motorcycle mr-1"></i> RASTREABILIDADE DE MOTO</a>
@@ -43,16 +43,16 @@
                 <a href="suporte.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-headset mr-1"></i> SUPORTE TÉCNICO</a>
             </nav>
 
-            <!-- Botão Menu Mobile -->
-            <div class="md:hidden flex items-center">
+            <!-- Botão Menu Mobile e Tablet (Exibido até telas de 1280px) -->
+            <div class="xl:hidden flex items-center">
                 <button id="menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2" aria-label="Abrir menu">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                    <i class="fa-solid fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Menu Dropdown Mobile -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700 px-4 pt-2 pb-4 space-y-1">
+        <!-- Menu Dropdown Mobile e Tablet -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-gray-800 border-t border-gray-700 px-4 pt-2 pb-4 space-y-1">
             <a href="index.html" class="block px-3 py-2 rounded text-amber-400 font-bold text-sm uppercase"><i class="fa-solid fa-house mr-2"></i> Início</a>
             <a href="carro.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-car mr-2"></i> RASTREABILIDADE DE CARRO</a>
             <a href="moto.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-motorcycle mr-2"></i> RASTREABILIDADE DE MOTO</a>
@@ -84,62 +84,62 @@
                 
                 <!-- Card Carro -->
                 <a href="carro.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-blue-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CARRO SEM FUNDO.png" alt="Módulo Carro" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE CARRO</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-blue-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Moto -->
                 <a href="moto.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-gray-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="MOTO SEM FUNDO.png" alt="Módulo Moto" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE MOTO</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-emerald-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Caminhão/Ônibus -->
                 <a href="caminhão-ônibus.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CAMINHAO E ONIBUS SEM FUNDO.png" alt="Módulo Caminhão / Ônibus" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE CAMINHÃO/ÔNIBUS</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-amber-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Sucata -->
                 <a href="sucata.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-emerald-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="SUCATAS SEM FUNDO.png" alt="Módulo Sucata" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">CONTROLE DE SUCATAS</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de sucatas recolhidas.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-purple-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Controle de Carga -->
                 <a href="controle_carga.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-green-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CARGA SEM FUNDO.png" alt="Módulo Controle de Cargas" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">CONTROLE DE CARGAS</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de cargas operacionais.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-indigo-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Suporte -->
                 <a href="suporte.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[200px] rounded-2xl border-4 border-red-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="SUPORTE SEM FUNDO.png" alt="Módulo Suporte" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">SUPORTE TÉCNICO</h2>
                     <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de treinamentos ministrados nas empresas credenciadas.</p>
-                    <span class="mt-auto text-xs font-bold text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <span class="mt-auto text-xs font-bold text-rose-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
             </div>
