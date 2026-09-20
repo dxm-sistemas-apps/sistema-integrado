@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RELATÓRIO DE SUCATAS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --bg-color: #f4f5f7;
+      --card-bg: #f8fafc;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --primary-red: #b91c1c;
+      --primary-dark: #0f172a;
+      --accent-blue: #1d4ed8;
+      --radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-manage-link {
+      background: none;
+      border: none;
+      color: var(--accent-blue);
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      background-color: #ffffff;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-dark);
+      background-color: #fff;
+    }
+
+    input[readonly] {
+      background-color: #f3f4f6;
+      color: var(--text-muted);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .btn-red { background-color: var(--primary-red); color: white; }
+    .btn-dark { background-color: var(--primary-dark); color: white; }
+    .btn-outline { background-color: #ffffff; border: 1px solid var(--border-color); color: var(--text-main); }
+    .btn-danger-outline { background-color: #fff; border: 1px solid #fca5a5; color: var(--primary-red); }
+    .btn-green { background-color: #16a34a; color: white; }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .item-header {
+      background-color: var(--primary-dark);
+      color: white;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .item-actions-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      padding: 2px 4px;
+    }
+
+    .btn-icon:hover { opacity: 1; }
+
+    .item-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .item-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .detail-group label {
+      font-size: 0.6rem;
+    }
+
+    .detail-group div {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      text-transform: uppercase;
+    }
+
+    .badge-plate {
+      display: inline-block;
+      background-color: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .images-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .item-image {
+      width: 240px;
+      height: 240px;
+      object-fit: contain;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      background-color: #f3f4f6;
+      cursor: zoom-in;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .item-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 400px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 85vh;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .modal-header h4 { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; }
+
+    .modal-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 250px;
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      border-radius: var(--radius);
+    }
+
+    .modal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px;
+      background: #f9fafb;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .modal-item-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      border-radius: 3px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .lightbox-modal.active { display: flex; }
+
+    .lightbox-img-wrapper {
+      position: relative;
+      max-width: 95vw;
+      max-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #preview-container {
+      width: 100%;
+      margin-top: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+    }
+
+    .preview-thumb-box {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #f3f4f6;
+      cursor: zoom-in;
+    }
+
+    .preview-thumb-box img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+
+    .preview-thumb-remove {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      background: rgba(185, 28, 28, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .img-counter {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .pdf-history-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .pdf-search-wrapper {
+      position: relative;
+    }
+
+    .pdf-search-wrapper input {
+      padding-left: 32px;
+    }
+
+    .pdf-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .pdf-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .pdf-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #f9fafb;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+
+    .pdf-card-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .pdf-card-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .pdf-card-text {
+      overflow: hidden;
+    }
+
+    .pdf-card-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pdf-card-meta {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .pdf-card-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .btn-icon-pdf {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .btn-icon-pdf:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    .pdf-empty-state {
+      text-align: center;
+      padding: 24px 12px;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius);
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #fff !important; }
+      #conteudo-principal { border: none !important; box-shadow: none !important; }
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body class="bg-[#f1f5f9] text-gray-800 font-sans min-h-screen antialiased pb-12">
+
+  <header class="bg-blue-900 text-white shadow-md no-print">
+      <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col items-center justify-center text-center">
+          <div class="bg-white p-1.5 rounded-lg shadow-sm mb-2">
+              <img id="appLogo" class="h-64 object-contain" alt="Logo DGAD">
+          </div>
+          <div>
+              <h1 class="font-bold text-base md:text-lg leading-tight uppercase">relatório de sucatas</h1>
+              <p class="text-xs text-blue-200 uppercase">sistema integrado - equipe operacional</p>
+          </div>
+      </div>
+  </header>
+
+  <div class="mx-auto max-w-2xl bg-white p-4 sm:p-8 mt-0 sm:mt-6 shadow-md rounded-none sm:rounded-lg border border-gray-200 flex flex-col gap-4" id="conteudo-principal">
+    
+    <header class="text-center border-b-2 border-gray-800 pb-4 mb-6">
+        <div class="flex justify-center mb-3">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" 
+              alt="Brasão do Estado do Rio de Janeiro" 
+              class="h-24 w-auto object-contain header-logo"
+              crossorigin="anonymous">
+        </div>
+        <h1 class="text-lg sm:text-xl font-bold uppercase tracking-wide text-gray-900">Governo do Estado do Rio de Janeiro</h1>
+        <h2 class="text-md sm:text-lg font-semibold uppercase text-gray-800">Departamento de Trânsito do Estado do Rio de Janeiro - DETRAN RJ</h2>
+        <h3 class="text-sm sm:text-md font-medium text-gray-600 uppercase mt-1">Diretoria Geral das Atividades de Desmontagem</h3>
+    </header>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="header-atividade">NATUREZA DA FISCALIZAÇÃO: *</label>
+        <input type="text" id="header-atividade" placeholder="FORÇA TAREFA / DENÚNCIA / PRAZO EXPIRADO" oninput="this.value = this.value.toUpperCase()">
+      </div>
+      <div class="form-group">
+        <label for="header-local">LOCAL: *</label>
+        <input type="text" id="header-local" placeholder="ENDEREÇO COMPLETO" oninput="this.value = this.value.toUpperCase()">
+      </div>
+      <div class="form-group">
+        <label for="header-data">DATA: *</label>
+        <input type="date" id="header-data">
+      </div>
+    </div>
+
+    <div class="card" id="form-card">
+      <div class="section-title">
+        <span id="form-section-title">NOVA SUCATA</span>
+        <button id="btn-cancel-edit" class="btn-sm btn-outline" style="display:none;" onclick="cancelarEdicao()">CANCELAR EDIÇÃO</button>
+      </div>
+      
+      <div class="form-group">
+        <label>
+          MODELO DO VEÍCULO: *
+          <button class="btn-manage-link" onclick="openManager('modelos')">+ GERENCIAR</button>
+        </label>
+        <select id="reg-modelo" onchange="autoFillMontadora()"></select>
+      </div>
+
+      <div class="form-group">
+        <label>
+          MONTADORA:
+          <button class="btn-manage-link" onclick="openManager('montadoras')">+ GERENCIAR</button>
+        </label>
+        <input type="text" id="reg-montadora" placeholder="Preenchido automaticamente" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>
+          COR: *
+          <button class="btn-manage-link" onclick="openManager('cores')">+ GERENCIAR</button>
+        </label>
+        <select id="reg-cor"></select>
+      </div>
+
+      <div class="form-group">
+        <label>IDENTIFICAÇÃO: *</label>
+        <div class="checkbox-group">
+          <input type="checkbox" id="reg-has-plate" onchange="togglePlateInput()">
+          <label for="reg-has-plate" style="text-transform:none; font-weight:normal;">SE POSSÍVEL, INFORMAR CHASSI / PLACA / VIS</label>
+        </div>
+        <input type="text" id="reg-placa" value="SEM IDENTIFICAÇÃO" readonly oninput="this.value = this.value.toUpperCase()">
+      </div>
+
+      <div class="form-group">
+        <label>IMAGENS (MÁXIMO 5): *</label>
+        <div class="btn-row">
+          <button class="btn btn-outline" type="button" onclick="triggerCameraInput()">📷 CAPTURAR FOTO</button>
+          <input type="file" id="file-camera" accept="image/*" capture="environment" style="display:none;" onchange="handleImageUpload(event)">
+          
+          <button class="btn btn-outline" type="button" onclick="triggerUploadInput()">📁 GALERIA / ARQUIVOS</button>
+          <input type="file" id="file-upload" accept="image/*" multiple style="display:none;" onchange="handleImageUpload(event)">
+        </div>
+        <div id="preview-container">
+          <div class="img-counter" id="img-counter-label">0 / 5 imagens anexadas</div>
+          <div class="preview-grid" id="preview-grid"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+        <button id="btn-salvar" class="btn btn-dark" style="width: 120px;" onclick="salvarRegistro()">SALVAR</button>
+      </div>
+    </div>
+
+    <div id="items-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
+
+    <div class="no-print mt-2 flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+      <button class="btn btn-danger-outline" onclick="limparTabela()">🗑️ LIMPAR PÁGINA</button>
+      <button class="btn btn-green" onclick="compartilharResumo()">WHATSAPP (RESUMO)</button>
+      <button class="btn btn-dark" onclick="gerarPDFPersonalizado()">📄 GERAR PDF OFICIAL</button>
+    </div>
+
+    <div class="card no-print" id="secao-historico-pdf" style="margin-top: 16px;">
+      <div class="pdf-history-header">
+        <div class="section-title" style="margin-bottom: 0;">
+          <span>📄 PDF'S GERADOS</span>
+        </div>
+        <div class="pdf-search-wrapper" style="margin-top: 8px;">
+          <span class="pdf-search-icon">🔍</span>
+          <input type="text" id="busca-pdf" oninput="renderizarGridPDFs()" placeholder="BUSCAR PDF POR ATIVIDADE, LOCAL OU DATA...">
+        </div>
+      </div>
+      <div class="pdf-grid" id="grid-pdfs-container"></div>
+    </div>
+
+  </div>
+
+  <div class="modal" id="manager-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="modal-title">Gerenciar Lista</h4>
+        <button class="btn-sm btn-outline" onclick="closeManager()">✕</button>
+      </div>
+      
+      <div id="modal-add-form" class="form-group">
+        <input type="text" id="modal-input-name" placeholder="Nome..." oninput="this.value = this.value.toUpperCase()">
+        <select id="modal-input-sub" style="display:none; margin-top: 6px;"></select>
+        <button class="btn btn-dark" style="margin-top:6px;" onclick="addOptionItem()">ADICIONAR</button>
+      </div>
+
+      <div class="modal-list" id="modal-items-container"></div>
+    </div>
+  </div>
+
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox()">
+    <div class="lightbox-img-wrapper" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="Imagem Ampliada">
+    </div>
+  </div>
+
+  <script>
+    const LOGO_DGAD_SUPORTE = "Gemini_Generated_Image_2pkrmk2pkrmk2pkr.jpg";
+
+    const STORAGE_KEYS = {
+      HEADER: 'detran_header_data_sucata',
+      FORM: 'detran_current_form_sucata',
+      MONTADORAS: 'detran_list_montadoras_sucata',
+      MODELOS: 'detran_list_modelos_sucata',
+      CORES: 'detran_list_cores_sucata',
+      REGISTROS: 'detran_registros_list_sucata',
+      HISTORICO_PDFS: 'detran_historico_pdfs_sucata'
+    };
+
+    const DB_NAME = 'DetranSucatasDB';
+    const DB_VERSION = 1;
+    const STORE_PDFS = 'historico_pdfs';
+
+    function openIndexedDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) return reject(new Error('IndexedDB indisponível'));
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_PDFS)) {
+            db.createObjectStore(STORE_PDFS, { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function dbSalvarPDF(pdfObj) {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_PDFS, 'readwrite');
+          const store = tx.objectStore(STORE_PDFS);
+          const req = store.put(pdfObj);
+          req.onsuccess = () => resolve(true);
+          req.onerror = () => reject(req.error);
+        });
+      } catch (err) {
+        console.warn('Fallback para LocalStorage', err);
+        salvarPDFLocalStorageFallback(pdfObj);
+      }
+    }
+
+    async function dbObterTodosPDFs() {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_PDFS, 'readonly');
+          const store = tx.objectStore(STORE_PDFS);
+          const req = store.getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => reject(req.error);
+        });
+      } catch (err) {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORICO_PDFS)) || [];
+      }
+    }
+
+    async function dbObterPDFPorId(id) {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_PDFS, 'readonly');
+          const store = tx.objectStore(STORE_PDFS);
+          const req = store.get(String(id));
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      } catch (err) {
+        const hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORICO_PDFS)) || [];
+        return hist.find(item => String(item.id) === String(id));
+      }
+    }
+
+    async function dbExcluirPDF(id) {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_PDFS, 'readwrite');
+          const store = tx.objectStore(STORE_PDFS);
+          const req = store.delete(String(id));
+          req.onsuccess = () => resolve(true);
+          req.onerror = () => reject(req.error);
+        });
+      } catch (err) {
+        let hist = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORICO_PDFS)) || [];
+        hist = hist.filter(item => String(item.id) !== String(id));
+        try { localStorage.setItem(STORAGE_KEYS.HISTORICO_PDFS, JSON.stringify(hist)); } catch (_) {}
+      }
+    }
+
+    function salvarPDFLocalStorageFallback(pdfObj) {
+      let historico = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORICO_PDFS)) || [];
+      const itemLeve = { ...pdfObj };
+      delete itemLeve.blob;
+      historico.unshift(itemLeve);
+      while (historico.length > 0) {
+        try {
+          localStorage.setItem(STORAGE_KEYS.HISTORICO_PDFS, JSON.stringify(historico));
+          break;
+        } catch (_) {
+          if (historico.length > 1) {
+            historico.pop();
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    async function migrarHistoricoAntigoParaIndexedDB() {
+      try {
+        const antigos = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORICO_PDFS));
+        if (antigos && Array.isArray(antigos) && antigos.length > 0) {
+          for (const item of antigos) {
+            await dbSalvarPDF(item);
+          }
+          localStorage.removeItem(STORAGE_KEYS.HISTORICO_PDFS);
+        }
+      } catch (_) {}
+    }
+
+    const defaultMontadoras = [
+      { id: 'm_gm', nome: 'CHEVROLET (GENERAL MOTORS)' },
+      { id: 'm_vw', nome: 'VOLKSWAGEN' },
+      { id: 'm_fiat', nome: 'FIAT' },
+      { id: 'm_ford', nome: 'FORD' },
+      { id: 'm_renault', nome: 'RENAULT' },
+      { id: 'm_peugeot', nome: 'PEUGEOT' },
+      { id: 'm_citroen', nome: 'CITROËN' },
+      { id: 'm_toyota', nome: 'TOYOTA' },
+      { id: 'm_honda', nome: 'HONDA' },
+      { id: 'm_hyundai', nome: 'HYUNDAI' },
+      { id: 'm_kia', nome: 'KIA' },
+      { id: 'm_gwm', nome: 'GWM' },
+      { id: 'm_byd', nome: 'BYD' }
+    ];
+
+    const defaultModelos = [
+      { id: 'mod_1', nome: 'OPALA', montadoraId: 'm_gm' },
+      { id: 'mod_2', nome: 'CARAVAN', montadoraId: 'm_gm' },
+      { id: 'mod_3', nome: 'CHEVETTE', montadoraId: 'm_gm' },
+      { id: 'mod_15', nome: 'CORSA', montadoraId: 'm_gm' },
+      { id: 'mod_33', nome: 'ONIX', montadoraId: 'm_gm' },
+      { id: 'mod_47', nome: 'FUSCA', montadoraId: 'm_vw' },
+      { id: 'mod_56', nome: 'GOL', montadoraId: 'm_vw' },
+      { id: 'mod_93', nome: 'UNO', montadoraId: 'm_fiat' },
+      { id: 'mod_99', nome: 'PALIO', montadoraId: 'm_fiat' },
+      { id: 'mod_141', nome: 'FIESTA', montadoraId: 'm_ford' },
+      { id: 'mod_170', nome: 'SANDERO', montadoraId: 'm_renault' },
+      { id: 'mod_210', nome: 'COROLLA', montadoraId: 'm_toyota' },
+      { id: 'mod_220', nome: 'CIVIC', montadoraId: 'm_honda' },
+      { id: 'mod_236', nome: 'HB20', montadoraId: 'm_hyundai' }
+    ];
+
+    const defaultCores = [
+      { id: 'c1', nome: 'BRANCA' },
+      { id: 'c2', nome: 'VERDE' },
+      { id: 'c3', nome: 'PRETA' },
+      { id: 'c4', nome: 'PRATA' },
+      { id: 'c5', nome: 'CINZA' },
+      { id: 'c6', nome: 'VERMELHA' },
+      { id: 'c7', nome: 'AZUL' },
+      { id: 'c8', nome: 'AMARELA' }
+    ];
+
+    let montadoras = JSON.parse(localStorage.getItem(STORAGE_KEYS.MONTADORAS)) || defaultMontadoras;
+    let modelos = JSON.parse(localStorage.getItem(STORAGE_KEYS.MODELOS)) || defaultModelos;
+    let cores = JSON.parse(localStorage.getItem(STORAGE_KEYS.CORES)) || defaultCores;
+    let registros = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTROS)) || [];
+    let currentImages = [];
+
+    let activeManagerType = ""; 
+    let editingItemId = null;
+    let editingOptionId = null;
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const logo = document.getElementById('appLogo');
+      if (logo) logo.src = LOGO_DGAD_SUPORTE;
+
+      await migrarHistoricoAntigoParaIndexedDB();
+
+      loadHeaderData();
+      renderSelects();
+      loadFormDraft();
+      renderRegistros();
+      renderizarGridPDFs();
+
+      const headerInputs = ['header-atividade', 'header-local', 'header-data'];
+      headerInputs.forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener('input', (e) => {
+          if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
+          saveHeaderData();
+        });
+      });
+
+      const formInputs = ['reg-modelo', 'reg-cor', 'reg-placa', 'reg-has-plate'];
+      formInputs.forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener('input', (e) => {
+          if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
+          if (!editingItemId) saveFormDraft();
+        });
+        el.addEventListener('change', () => {
+          if (!editingItemId) saveFormDraft();
+        });
+      });
+    });
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-modal').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.remove('active');
+      document.getElementById('lightbox-img').src = '';
+    }
+
+    function mostrarAlertaAviso(titulo, mensagemHTML, elementoParaFocar) {
+      let elementoAlvo = elementoParaFocar;
+      if (elementoParaFocar) {
+        const elementoRect = elementoParaFocar.getBoundingClientRect();
+        const absoluteElementTop = elementoRect.top + window.pageYOffset;
+        const middleOfPosition = absoluteElementTop - (window.innerHeight / 2) + (elementoRect.height / 2);
+        
+        window.scrollTo({ top: middleOfPosition, behavior: 'smooth' });
+
+        if (elementoAlvo) {
+            elementoAlvo.style.outline = '4px solid #dc2626';
+            elementoAlvo.style.transition = 'outline 0.3s';
+        }
+
+        if (elementoParaFocar.focus) {
+          elementoParaFocar.focus({ preventScroll: true });
+          if (elementoParaFocar.select) elementoParaFocar.select();
+        }
+      }
+
+      Swal.fire({
+        icon: 'warning',
+        title: titulo,
+        html: mensagemHTML,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#000000',
+        customClass: { popup: 'font-sans' },
+        didClose: () => {
+          if (elementoParaFocar) {
+            if (elementoParaFocar.focus) {
+              elementoParaFocar.focus({ preventScroll: true });
+              if (elementoParaFocar.select) elementoParaFocar.select();
+            }
+            setTimeout(() => {
+              if (elementoAlvo) elementoAlvo.style.outline = 'none';
+            }, 1200);
+          }
+        }
+      });
+    }
+
+    function sortAlphabetically(arr) {
+      return arr.sort((a, b) => a.nome.localeCompare(b.nome));
+    }
+
+    function renderSelects() {
+      montadoras = sortAlphabetically(montadoras);
+      modelos = sortAlphabetically(modelos);
+      cores = sortAlphabetically(cores);
+
+      const selectModelo = document.getElementById('reg-modelo');
+      selectModelo.innerHTML = '<option value="">SELECIONE O MODELO</option>';
+      modelos.forEach(mod => {
+        const opt = document.createElement('option');
+        opt.value = mod.id;
+        opt.textContent = mod.nome.toUpperCase();
+        selectModelo.appendChild(opt);
+      });
+
+      const selectCor = document.getElementById('reg-cor');
+      selectCor.innerHTML = '<option value="">SELECIONE A COR</option>';
+      cores.forEach(cor => {
+        const opt = document.createElement('option');
+        opt.value = cor.id;
+        opt.textContent = cor.nome.toUpperCase();
+        selectCor.appendChild(opt);
+      });
+
+      try {
+        localStorage.setItem(STORAGE_KEYS.MONTADORAS, JSON.stringify(montadoras));
+        localStorage.setItem(STORAGE_KEYS.MODELOS, JSON.stringify(modelos));
+        localStorage.setItem(STORAGE_KEYS.CORES, JSON.stringify(cores));
+      } catch (_) {}
+    }
+
+    function autoFillMontadora() {
+      const modeloId = document.getElementById('reg-modelo').value;
+      const montadoraInput = document.getElementById('reg-montadora');
+      
+      const modeloEncontrado = modelos.find(m => m.id === modeloId);
+      if (modeloEncontrado) {
+        const montadora = montadoras.find(m => m.id === modeloEncontrado.montadoraId);
+        montadoraInput.value = montadora ? montadora.nome.toUpperCase() : '';
+      } else {
+        montadoraInput.value = '';
+      }
+    }
+
+    function saveHeaderData() {
+      const data = {
+        atividade: document.getElementById('header-atividade').value.toUpperCase(),
+        local: document.getElementById('header-local').value.toUpperCase(),
+        data: document.getElementById('header-data').value
+      };
+      try {
+        localStorage.setItem(STORAGE_KEYS.HEADER, JSON.stringify(data));
+      } catch (_) {}
+    }
+
+    function loadHeaderData() {
+      const saved = localStorage.getItem(STORAGE_KEYS.HEADER);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          document.getElementById('header-atividade').value = (data.atividade || '').toUpperCase();
+          document.getElementById('header-local').value = (data.local || '').toUpperCase();
+          document.getElementById('header-data').value = data.data || '';
+        } catch (_) {}
+      }
+    }
+
+    function saveFormDraft() {
+      if (editingItemId) return;
+      const draft = {
+        modeloId: document.getElementById('reg-modelo').value,
+        corId: document.getElementById('reg-cor').value,
+        hasPlate: document.getElementById('reg-has-plate').checked,
+        placa: document.getElementById('reg-placa').value.toUpperCase(),
+        images: currentImages
+      };
+      try {
+        localStorage.setItem(STORAGE_KEYS.FORM, JSON.stringify(draft));
+      } catch (_) {}
+    }
+
+    function loadFormDraft() {
+      if (editingItemId) return;
+      const saved = localStorage.getItem(STORAGE_KEYS.FORM);
+      if (saved) {
+        try {
+          const draft = JSON.parse(saved);
+          document.getElementById('reg-modelo').value = draft.modeloId || '';
+          autoFillMontadora();
+          document.getElementById('reg-cor').value = draft.corId || '';
+          document.getElementById('reg-has-plate').checked = draft.hasPlate || false;
+          
+          togglePlateInput(false);
+          if(draft.hasPlate) {
+            document.getElementById('reg-placa').value = (draft.placa || '').toUpperCase();
+          }
+
+          if (Array.isArray(draft.images)) {
+            currentImages = draft.images;
+            renderImagePreviews();
+          } else if (draft.image) {
+            currentImages = [draft.image];
+            renderImagePreviews();
+          }
+        } catch (_) {}
+      }
+    }
+
+    function resetFormState() {
+      editingItemId = null;
+      document.getElementById('form-section-title').textContent = 'NOVA SUCATA';
+      document.getElementById('btn-cancel-edit').style.display = 'none';
+      document.getElementById('btn-salvar').textContent = 'SALVAR';
+
+      document.getElementById('reg-modelo').value = '';
+      document.getElementById('reg-montadora').value = '';
+      document.getElementById('reg-cor').value = '';
+      document.getElementById('reg-has-plate').checked = false;
+      togglePlateInput(false);
+      currentImages = [];
+      renderImagePreviews();
+      localStorage.removeItem(STORAGE_KEYS.FORM);
+    }
+
+    function cancelarEdicao() {
+      resetFormState();
+      loadFormDraft();
+    }
+
+    function togglePlateInput(resetText = true) {
+      const hasPlate = document.getElementById('reg-has-plate').checked;
+      const placaInput = document.getElementById('reg-placa');
+
+      if (hasPlate) {
+        placaInput.readOnly = false;
+        if(resetText) placaInput.value = '';
+        placaInput.placeholder = 'EX: ABC1D23 OU ABC1234';
+      } else {
+        placaInput.readOnly = true;
+        placaInput.value = 'SEM IDENTIFICAÇÃO';
+      }
+    }
+
+    function triggerCameraInput() {
+      if (currentImages.length >= 5) {
+        mostrarAlertaAviso('LIMITE DE IMAGENS', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> LIMITE MÁXIMO DE 5 IMAGENS POR SUCATA ATINGIDO!');
+        return;
+      }
+      document.getElementById('file-camera').click();
+    }
+
+    function triggerUploadInput() {
+      if (currentImages.length >= 5) {
+        mostrarAlertaAviso('LIMITE DE IMAGENS', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> LIMITE MÁXIMO DE 5 IMAGENS POR SUCATA ATINGIDO!');
+        return;
+      }
+      document.getElementById('file-upload').click();
+    }
+
+    function handleImageUpload(event) {
+      const files = Array.from(event.target.files);
+      if (!files.length) return;
+
+      const remainingSlots = 5 - currentImages.length;
+      if (files.length > remainingSlots) {
+        mostrarAlertaAviso('LIMITE DE IMAGENS', `<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> VOCÊ PODE ADICIONAR MAIS NO MÁXIMO ${remainingSlots} IMAGEM(NS).`);
+      }
+
+      const filesToProcess = files.slice(0, remainingSlots);
+      let processedCount = 0;
+
+      filesToProcess.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = function() {
+            const MAX_DIMENSION = 400; 
+            let width = img.width;
+            let height = img.height;
+
+            if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+              if (width > height) {
+                height = Math.round((height * MAX_DIMENSION) / width);
+                width = MAX_DIMENSION;
+              } else {
+                width = Math.round((width * MAX_DIMENSION) / height);
+                height = MAX_DIMENSION;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const base64Resized = canvas.toDataURL('image/jpeg', 0.6);
+            currentImages.push(base64Resized);
+            
+            processedCount++;
+            if (processedCount === filesToProcess.length) {
+              renderImagePreviews();
+              if (!editingItemId) saveFormDraft();
+            }
+          };
+          img.onerror = function() {
+            processedCount++;
+            if (processedCount === filesToProcess.length) {
+              renderImagePreviews();
+              if (!editingItemId) saveFormDraft();
+            }
+          };
+        };
+        reader.readAsDataURL(file);
+      });
+
+      event.target.value = '';
+    }
+
+    function removeImage(index, event) {
+      if (event) event.stopPropagation();
+      currentImages.splice(index, 1);
+      renderImagePreviews();
+      if (!editingItemId) saveFormDraft();
+    }
+
+    function renderImagePreviews() {
+      const container = document.getElementById('preview-container');
+      const grid = document.getElementById('preview-grid');
+      const counter = document.getElementById('img-counter-label');
+
+      grid.innerHTML = '';
+      counter.textContent = `${currentImages.length} / 5 imagens anexadas`;
+
+      if (currentImages.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'flex';
+      currentImages.forEach((imgSrc, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'preview-thumb-box';
+        thumb.onclick = () => openLightbox(imgSrc);
+        thumb.innerHTML = `
+          <img src="${imgSrc}" alt="Imagem ${idx + 1}">
+          <button class="preview-thumb-remove" type="button" onclick="removeImage(${idx}, event)" title="Remover">✕</button>
+        `;
+        grid.appendChild(thumb);
+      });
+    }
+
+    function salvarRegistro() {
+      const elAtividade = document.getElementById('header-atividade');
+      const elLocal = document.getElementById('header-local');
+      const elData = document.getElementById('header-data');
+      const elModelo = document.getElementById('reg-modelo');
+      const elCor = document.getElementById('reg-cor');
+      const elPlaca = document.getElementById('reg-placa');
+      const hasPlate = document.getElementById('reg-has-plate').checked;
+
+      const atividade = elAtividade.value.trim();
+      const local = elLocal.value.trim();
+      const dataHeader = elData.value;
+      const modeloId = elModelo.value;
+      const corId = elCor.value;
+      const placa = elPlaca.value.trim();
+
+      if (!atividade) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return; }
+      if (!local) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"LOCAL"</span>!', elLocal); return; }
+      if (!dataHeader) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"DATA"</span>!', elData); return; }
+      if (!modeloId) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE O <span style="color:#dc2626; font-weight:bold;">"MODELO DO VEÍCULO"</span>!', elModelo); return; }
+      if (!corId) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"COR"</span>!', elCor); return; }
+      if (hasPlate && !placa) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> INFORME A <span style="color:#dc2626; font-weight:bold;">"IDENTIFICAÇÃO"</span> DO VEÍCULO!', elPlaca); return; }
+      if (currentImages.length === 0) { mostrarAlertaAviso('IMAGENS FALTANDO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> ADICIONE AO MENOS <span style="color:#dc2626; font-weight:bold;">1 IMAGEM</span> DA SUCATA!'); return; }
+
+      const objModelo = modelos.find(m => m.id === modeloId);
+      const objMontadora = montadoras.find(m => m.id === objModelo?.montadoraId);
+      const objCor = cores.find(c => c.id === corId);
+
+      if (editingItemId) {
+        const index = registros.findIndex(r => r.id === editingItemId);
+        if (index !== -1) {
+          registros[index].modelo = objModelo ? objModelo.nome.toUpperCase() : 'N/A';
+          registros[index].montadora = objMontadora ? objMontadora.nome.toUpperCase() : 'N/A';
+          registros[index].cor = objCor ? objCor.nome.toUpperCase() : 'N/A';
+          registros[index].placa = placa.toUpperCase();
+          registros[index].imagens = [...currentImages];
+        }
+      } else {
+        const novoRegistro = {
+          id: Date.now(),
+          modelo: objModelo ? objModelo.nome.toUpperCase() : 'N/A',
+          montadora: objMontadora ? objMontadora.nome.toUpperCase() : 'N/A',
+          cor: objCor ? objCor.nome.toUpperCase() : 'N/A',
+          placa: placa.toUpperCase(),
+          imagens: [...currentImages]
+        };
+        registros.push(novoRegistro);
+      }
+
+      try {
+        localStorage.setItem(STORAGE_KEYS.REGISTROS, JSON.stringify(registros));
+      } catch (e) {
+          mostrarAlertaAviso('MEMÓRIA CHEIA', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> O SEU NAVEGADOR ESTÁ SEM ESPAÇO NA MEMÓRIA. POR FAVOR, APAGUE ALGUNS REGISTROS ANTIGOS OU REDUZA O NÚMERO DE FOTOS.');
+          return;
+      }
+
+      renderRegistros();
+      resetFormState();
+      loadFormDraft();
+      
+      document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function editarRegistro(id) {
+      const item = registros.find(r => r.id === id);
+      if (!item) return;
+
+      editingItemId = id;
+      document.getElementById('form-section-title').textContent = `EDITAR SUCATA (#${registros.findIndex(r => r.id === id) + 1})`;
+      document.getElementById('btn-cancel-edit').style.display = 'block';
+      document.getElementById('btn-salvar').textContent = 'ATUALIZAR';
+
+      const objModelo = modelos.find(m => m.nome.toUpperCase() === item.modelo);
+      if (objModelo) {
+        document.getElementById('reg-modelo').value = objModelo.id;
+        autoFillMontadora();
+      } else {
+        document.getElementById('reg-modelo').value = '';
+        document.getElementById('reg-montadora').value = item.montadora;
+      }
+
+      const objCor = cores.find(c => c.nome.toUpperCase() === item.cor);
+      if (objCor) {
+        document.getElementById('reg-cor').value = objCor.id;
+      } else {
+        document.getElementById('reg-cor').value = '';
+      }
+
+      const hasPlate = item.placa !== 'SEM IDENTIFICAÇÃO';
+      document.getElementById('reg-has-plate').checked = hasPlate;
+      togglePlateInput(false);
+      document.getElementById('reg-placa').value = item.placa;
+
+      currentImages = item.imagens ? [...item.imagens] : (item.imagem ? [item.imagem] : []);
+      renderImagePreviews();
+
+      document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderRegistros() {
+      const container = document.getElementById('items-list');
+      container.innerHTML = '';
+
+      registros.forEach((item, index) => {
+        const itemImages = item.imagens || (item.imagem ? [item.imagem] : []);
+        
+        let imagesHTML = '<div class="images-grid">';
+        itemImages.forEach((img, i) => {
+          imagesHTML += `<img src="${img}" class="item-image" alt="Foto ${i + 1}" onclick="openLightbox('${img}')" title="Clique para ampliar">`;
+        });
+        imagesHTML += '</div>';
+
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card';
+        itemCard.innerHTML = `
+          <div class="item-header">
+            <span>#${String(index + 1).padStart(2, '0')}</span>
+            <div class="item-actions-group">
+              <button class="btn-icon" onclick="editarRegistro(${item.id})" title="Editar">✏️</button>
+              <button class="btn-icon" onclick="excluirRegistro(${item.id})" title="Excluir">🗑️</button>
+            </div>
+          </div>
+          <div class="item-body">
+            <div class="item-details">
+              <div class="detail-group">
+                <label>MODELO</label>
+                <div>${item.modelo}</div>
+              </div>
+              <div class="detail-group">
+                <label>MONTADORA</label>
+                <div>${item.montadora}</div>
+              </div>
+              <div class="detail-group">
+                <label>COR</label>
+                <div>${item.cor}</div>
+              </div>
+              <div class="detail-group">
+                <label>IDENTIFICAÇÃO</label>
+                <div>
+                  <span class="${item.placa === 'SEM IDENTIFICAÇÃO' ? '' : 'badge-plate'}">${item.placa}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              ${imagesHTML}
+            </div>
+          </div>
+        `;
+        container.appendChild(itemCard);
+      });
+    }
+
+    function excluirRegistro(id) {
+      if (editingItemId === id) {
+        resetFormState();
+        loadFormDraft();
+      }
+      Swal.fire({
+        title: 'EXCLUIR SUCATA?',
+        text: 'ATENÇÃO, ESTA AÇÃO NÃO PODERÁ SER DESFEITA.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#000000',
+        confirmButtonText: 'EXCLUIR',
+        cancelButtonText: 'CANCELAR'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          registros = registros.filter(r => r.id !== id);
+          try {
+            localStorage.setItem(STORAGE_KEYS.REGISTROS, JSON.stringify(registros));
+          } catch (_) {}
+          renderRegistros();
+          Swal.fire({
+            icon: 'success',
+            title: 'EXCLUÍDO!',
+            text: 'ATENÇÃO, O REGISTRO FOI EXCLUÍDO.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        }
+      });
+    }
+
+    function limparTabela() {
+      Swal.fire({
+        title: 'TEM CERTEZA?',
+        html: "<span style='color:#f59e0b; font-weight:bold;'>ATENÇÃO:  </span> ISTO IRÁ <span style='color:#dc2626; font-weight:bold;'> 'APAGAR' </span> TODOS OS DADOS DA PÁGINA!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#000000',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'CANCELAR'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          registros = [];
+          localStorage.removeItem(STORAGE_KEYS.REGISTROS);
+          renderRegistros();
+
+          document.getElementById('header-atividade').value = '';
+          document.getElementById('header-local').value = '';
+          document.getElementById('header-data').value = '';
+          
+          saveHeaderData();
+          resetFormState();
+          loadFormDraft();
+          
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    function validarGeracaoPDF() {
+      const elAtividade = document.getElementById('header-atividade');
+      const elLocal = document.getElementById('header-local');
+      const elData = document.getElementById('header-data');
+
+      if (!elAtividade.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return false; }
+      if (!elLocal.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"LOCAL"</span>!', elLocal); return false; }
+      if (!elData.value) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"DATA"</span>!', elData); return false; }
+
+      if (registros.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'LISTA VAZIA',
+          text: 'ATENÇÃO, NÃO HÁ NENHUMA SUCATA REGISTRADA PARA GERAR O PDF.',
+          confirmButtonColor: '#000000'
+        });
+        return false;
+      }
+
+      return true;
+    }
+
+    function obterBrasaoBase64() {
+        return new Promise((resolve) => {
+            try {
+                const imgNode = document.querySelector('.header-logo');
+                if (imgNode && imgNode.complete && imgNode.naturalWidth > 0) {
+                    const maxDim = 180;
+                    let w = imgNode.naturalWidth;
+                    let h = imgNode.naturalHeight;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(imgNode, 0, 0, w, h);
+                    resolve({ data: canvas.toDataURL('image/png'), format: 'PNG' });
+                } else {
+                    resolve(null);
+                }
+            } catch (e) {
+                resolve(null);
+            }
+        });
+    }
+
+    function otimizarImagemParaPDF(imgSrc, maxDim = 380, quality = 0.65) {
+      return new Promise((resolve) => {
+        if (!imgSrc) return resolve(null);
+        if (imgSrc.startsWith('data:image/jpeg') && imgSrc.length < 60000) {
+          return resolve(imgSrc);
+        }
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve(imgSrc);
+        img.src = imgSrc;
+      });
+    }
+
+    // -----------------------------------------------------------
+    // GERAÇÃO DE PDF OFICIAL JS-PDF COM CARD ÚNICO ENVOLVENTE
+    // -----------------------------------------------------------
+    async function gerarPDFPersonalizado() {
+        if (!validarGeracaoPDF()) return;
+
+        const atividade = document.getElementById('header-atividade').value.trim();
+        const local = document.getElementById('header-local').value.trim();
+        const dataRaw = document.getElementById('header-data').value;
+        const dataBR = dataRaw.split('-').reverse().join('/');
+        const cleanAtividade = atividade.replace(/[\/\\\\:*?"<>|]/g, '-');
+        const cleanLocal = local.replace(/[\/\\\\:*?"<>|]/g, '-');
+        const nomeArquivo = `RELATÓRIO DE SUCATAS - ${cleanAtividade.toUpperCase()} - ${cleanLocal.toUpperCase()} - ${dataRaw.split('-').reverse().join('-')}.pdf`;
+
+        Swal.fire({
+            title: 'GERANDO PDF...',
+            text: 'AGUARDE A CRIAÇÃO E SALVAMENTO DO ARQUIVO OTIMIZADO.',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4',
+                compress: true
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const marginX = 14;
+            const cardWidth = pageWidth - (marginX * 2); // 182 mm
+            let curY = 10;
+
+            // 1. Brasão Otimizado e Cabeçalho Oficial
+            const logoInfo = await obterBrasaoBase64();
+            if (logoInfo && logoInfo.data) {
+                pdf.addImage(logoInfo.data, logoInfo.format, pageWidth / 2 - 12, curY, 24, 24, undefined, 'FAST');
+                curY += 32; 
+            } else {
+                curY += 10;
+            }
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(12);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('GOVERNO DO ESTADO DO RIO DE JANEIRO', pageWidth / 2, curY, { align: 'center' });
+            curY += 5.5;
+            pdf.setFontSize(10);
+            pdf.text('DEPARTAMENTO DE TRÂNSITO DO ESTADO DO RIO DE JANEIRO - DETRAN RJ', pageWidth / 2, curY, { align: 'center' });
+            curY += 5.5;
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(9);
+            pdf.text('DIRETORIA GERAL DAS ATIVIDADES DE DESMONTAGEM', pageWidth / 2, curY, { align: 'center' });
+            curY += 10;
+
+            // 2. Caixas de Informação Gerais
+            const drawInfoBox = (x, yPos, w, label, value) => {
+                pdf.setFillColor(249, 250, 251); 
+                pdf.setDrawColor(220, 220, 220);
+                pdf.roundedRect(x, yPos, w, 11, 1.5, 1.5, 'FD');
+                
+                pdf.setFontSize(7);
+                pdf.setTextColor(100, 100, 100); 
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(label, x + 3, yPos + 4);
+                
+                pdf.setFontSize(9);
+                pdf.setTextColor(0, 0, 0);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(value, x + 3, yPos + 9);
+            };
+
+            drawInfoBox(marginX, curY, cardWidth, 'NATUREZA DA FISCALIZAÇÃO:', atividade.toUpperCase());
+            curY += 13;
+            drawInfoBox(marginX, curY, 130, 'LOCAL:', local.toUpperCase());
+            drawInfoBox(148, curY, 48, 'DATA:', dataBR);
+            curY += 18;
+
+            // 3. Título Principal
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('RELATÓRIO DE SUCATAS REGISTRADAS', pageWidth / 2, curY, { align: 'center' });
+            curY += 7;
+
+            // 4. Parâmetros das Miniaturas Proporcionais (reduzidas de 56 para 42 mm)
+            const imgWidth = 42;
+            const imgHeight = 42;
+            const gapX = 3.5;
+            const gapY = 4;
+            const imgsPerRow = 4; // Até 4 imagens por linha de forma harmônica
+
+            // 5. Renderização em Card Único com Linha Envolvente
+            for (let i = 0; i < registros.length; i++) {
+                const reg = registros[i];
+                const imgs = reg.imagens || (reg.imagem ? [reg.imagem] : []);
+
+                // Cálculo prévio da altura exata do Card Único
+                // Cabeçalho (7.5) + Dados Veículo (10.5) + Identificação (10.5) = 28.5 mm
+                let cardBodyHeight = 7.5 + 10.5 + 10.5;
+
+                if (imgs.length > 0) {
+                    const numRows = Math.ceil(imgs.length / imgsPerRow);
+                    cardBodyHeight += 4 + (numRows * imgHeight) + ((numRows - 1) * gapY) + 4; // Padding interno
+                } else {
+                    cardBodyHeight += 9; // Linha informativa "Nenhuma imagem"
+                }
+
+                // Quebra de página inteligente se não couber
+                if (curY + cardBodyHeight > pageHeight - 12) {
+                    pdf.addPage();
+                    curY = 12;
+                }
+
+                const cardStartY = curY;
+
+                // --- 1. Topo do Card (Faixa Escura) ---
+                pdf.setFillColor(31, 41, 55);
+                pdf.rect(marginX, curY, cardWidth, 7.5, 'F');
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(255, 255, 255);
+                pdf.text(`SUCATA #${String(i + 1).padStart(2, '0')}`, marginX + 3, curY + 5.2);
+                curY += 7.5;
+
+                // --- 2. Linha 1: Modelo / Montadora / Cor ---
+                pdf.setFillColor(250, 250, 250);
+                pdf.setDrawColor(225, 225, 225);
+                pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
+
+                const colWidth = cardWidth / 3;
+                pdf.setTextColor(110, 110, 110);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(6.5);
+                pdf.text('MODELO:', marginX + 3, curY + 4);
+                pdf.text('MONTADORA:', marginX + colWidth + 3, curY + 4);
+                pdf.text('COR:', marginX + (colWidth * 2) + 3, curY + 4);
+
+                pdf.setTextColor(17, 24, 39);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(8);
+                pdf.text(reg.modelo || 'N/A', marginX + 3, curY + 8.2);
+                pdf.text(reg.montadora || 'N/A', marginX + colWidth + 3, curY + 8.2);
+                pdf.text(reg.cor || 'N/A', marginX + (colWidth * 2) + 3, curY + 8.2);
+                curY += 10.5;
+
+                // --- 3. Linha 2: Chassi / Placa / VIS ---
+                pdf.setFillColor(255, 255, 255);
+                pdf.setDrawColor(225, 225, 225);
+                pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
+
+                pdf.setTextColor(110, 110, 110);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(6.5);
+                pdf.text('CHASSI / PLACA / VIS:', marginX + 3, curY + 4);
+
+                pdf.setTextColor(17, 24, 39);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(8.5);
+                pdf.text(reg.placa || 'SEM IDENTIFICAÇÃO', marginX + 3, curY + 8.2);
+                curY += 10.5;
+
+                // --- 4. Área das Miniaturas Proporcionais ---
+                if (imgs.length > 0) {
+                    curY += 3.5;
+                    let currentX = marginX + 3;
+                    let imgRowStartY = curY;
+
+                    for (let j = 0; j < imgs.length; j++) {
+                        if (currentX + imgWidth > marginX + cardWidth - 2) {
+                            currentX = marginX + 3;
+                            imgRowStartY += imgHeight + gapY;
+                        }
+
+                        try {
+                            const imgOtimizada = await otimizarImagemParaPDF(imgs[j]);
+                            pdf.setDrawColor(215, 215, 215);
+                            pdf.rect(currentX, imgRowStartY, imgWidth, imgHeight);
+                            if (imgOtimizada) {
+                                pdf.addImage(imgOtimizada, 'JPEG', currentX + 0.5, imgRowStartY + 0.5, imgWidth - 1, imgHeight - 1, undefined, 'FAST');
+                            }
+                        } catch(e) {
+                            console.warn("Erro ao renderizar imagem.", e);
+                        }
+
+                        currentX += imgWidth + gapX;
+                    }
+                    curY = imgRowStartY + imgHeight + 4;
+                } else {
+                    pdf.setFont('helvetica', 'italic');
+                    pdf.setFontSize(7.5);
+                    pdf.setTextColor(150, 150, 150);
+                    pdf.text('Nenhuma imagem anexada.', marginX + 3, curY + 5.5);
+                    curY += 8.5;
+                }
+
+                // --- 5. Borda Envolvente do Card Único ---
+                const finalCardHeight = curY - cardStartY;
+                pdf.setDrawColor(180, 185, 195);
+                pdf.setLineWidth(0.35);
+                pdf.rect(marginX, cardStartY, cardWidth, finalCardHeight, 'S');
+
+                // Espaçamento reduzido entre sucatas
+                curY += 4;
+            }
+
+            // 6. Salvamento Otimizado
+            const pdfBlob = pdf.output('blob');
+            const pdfDataUri = pdf.output('datauristring');
+
+            await salvarPDFHistorico({
+                id: Date.now().toString(),
+                nome: nomeArquivo,
+                atividade: cleanAtividade.toUpperCase(),
+                local: cleanLocal.toUpperCase(),
+                dataFiscalizacao: dataBR,
+                dataGeracao: new Date().toLocaleString('pt-BR'),
+                timestamp: Date.now(),
+                blob: pdfBlob,
+                dataUri: pdfDataUri
+            });
+
+            pdf.save(nomeArquivo);
+            const foiCompartilhado = await compartilharPDFGeradoWhatsApp(pdfBlob, nomeArquivo);
+
+            Swal.close();
+
+            if (foiCompartilhado) {
+                 Swal.fire({
+                    icon: 'success',
+                    title: 'PDF GERADO E COMPARTILHADO!',
+                    text: 'O arquivo foi salvo no dispositivo e adicionado ao histórico da página.',
+                    confirmButtonColor: '#000000'
+                });
+            } else {
+                 Swal.fire({
+                    icon: 'success',
+                    title: 'PDF GERADO COM SUCESSO!',
+                    html: `O arquivo foi salvo no seu dispositivo e adicionado ao histórico da página.<br><br>
+                           <b>PARA ENVIAR:</b><br>Abra o WhatsApp e anexe o PDF gerado.`,
+                    confirmButtonColor: '#000000'
+                });
+            }
+
+        } catch (error) {
+            console.error('Erro ao gerar PDF:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'ERRO AO GERAR PDF',
+                text: 'ATENÇÃO, OCORREU UM PROBLEMA AO GERAR O PDF.',
+                confirmButtonColor: '#000000'
+            });
+        }
+    }
+
+    async function compartilharPDFGeradoWhatsApp(blob, nomeArquivo) {
+      const arquivo = new File([blob], nomeArquivo, { type: 'application/pdf' });
+
+      if (navigator.share && navigator.canShare) {
+        try {
+          if (navigator.canShare({ files: [arquivo] })) {
+            await navigator.share({
+              files: [arquivo],
+              title: nomeArquivo,
+              text: 'RELATÓRIO DE SUCATAS'
+            });
+            return true;
+          }
+        } catch (error) {
+          if (error && error.name === 'AbortError') return false;
+        }
+      }
+      return false;
+    }
+
+    function compartilharResumo() {
+      if (!validarGeracaoPDF()) return;
+
+      const atividade = document.getElementById('header-atividade').value.toUpperCase();
+      const local = document.getElementById('header-local').value.toUpperCase();
+      const dataRaw = document.getElementById('header-data').value;
+      const dataBR = dataRaw.split('-').reverse().join('/');
+
+      let mensagem = `*RELATÓRIO DE SUCATAS - DETRAN RJ*\n\n`;
+      mensagem += `🧐 *FISCALIZAÇÃO:* ${atividade}\n`;
+      mensagem += `📍 *LOCAL:* ${local}\n`;
+      mensagem += `📅 *DATA:* ${dataBR}\n\n`;
+      mensagem += `🚗 *TOTAL DE SUCATAS REGISTRADAS:* ${registros.length}\n\n`;
+      
+      registros.forEach((r, i) => {
+          mensagem += `*#${String(i+1).padStart(2, '0')}. ${r.modelo}*\nMontadora: ${r.montadora} | Cor: ${r.cor} | ID: ${r.placa}\n\n`;
+      });
+
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`, '_blank');
+    }
+
+    async function salvarPDFHistorico(pdfObj) {
+      try {
+        await dbSalvarPDF(pdfObj);
+        await renderizarGridPDFs();
+      } catch(e) {
+        console.error('Erro ao salvar no histórico:', e);
+      }
+    }
+
+    async function renderizarGridPDFs() {
+      const container = document.getElementById('grid-pdfs-container');
+      if (!container) return;
+
+      const termoBusca = (document.getElementById('busca-pdf')?.value || '').toLowerCase().trim();
+      let historico = await dbObterTodosPDFs();
+
+      historico.sort((a, b) => b.timestamp - a.timestamp);
+
+      if (termoBusca) {
+        historico = historico.filter(item =>
+          (item.nome && item.nome.toLowerCase().includes(termoBusca)) ||
+          (item.atividade && item.atividade.toLowerCase().includes(termoBusca)) ||
+          (item.local && item.local.toLowerCase().includes(termoBusca)) ||
+          (item.dataFiscalizacao && item.dataFiscalizacao.toLowerCase().includes(termoBusca)) ||
+          (item.dataGeracao && item.dataGeracao.toLowerCase().includes(termoBusca))
+        );
+      }
+
+      if (historico.length === 0) {
+        container.innerHTML = `<div class="pdf-empty-state">NENHUM PDF ENCONTRADO NO HISTÓRICO</div>`;
+        return;
+      }
+
+      container.innerHTML = historico.map(item => `
+        <div class="pdf-card">
+          <div class="pdf-card-info" onclick="abrirPDF('${item.id}')" title="CLIQUE AQUI PARA ABRIR O PDF">
+            <span class="pdf-card-icon">📄</span>
+            <div class="pdf-card-text">
+              <div class="pdf-card-title" title="${item.nome}">${item.atividade || 'SUCATAS'} - ${item.local || 'LOCAL'} - ${item.dataFiscalizacao || ''}</div>
+              <div class="pdf-card-meta">GERADO EM: ${item.dataGeracao}</div>
+            </div>
+          </div>
+          <div class="pdf-card-actions">
+            <button class="btn-icon-pdf" onclick="abrirPDF('${item.id}')" title="ABRIR / VISUALIZAR PDF">👁️</button>
+            <button class="btn-icon-pdf" onclick="baixarPDFHistorico('${item.id}')" title="BAIXAR PDF">⬇️</button>
+            <button class="btn-icon-pdf" onclick="excluirPDF('${item.id}')" title="EXCLUIR PDF">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function abrirPDF(id) {
+      const pdfObj = await dbObterPDFPorId(id);
+      if (pdfObj) {
+        let url = '';
+        if (pdfObj.blob) {
+          url = URL.createObjectURL(pdfObj.blob);
+        } else if (pdfObj.dataUri) {
+          url = pdfObj.dataUri;
+        }
+
+        if (url) {
+          const win = window.open(url, '_blank');
+          if (!win) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'BLOQUEADOR DE POP-UP DETECTADO',
+              text: 'ATENÇÃO, PERMITA POP-UPS PARA ABRIR O PDF SALVO.',
+              confirmButtonColor: '#000000'
+            });
+          }
+        }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'NÃO ENCONTRADO',
+          text: 'O PDF selecionado não foi encontrado no histórico.',
+          confirmButtonColor: '#000000'
+        });
+      }
+    }
+
+    async function baixarPDFHistorico(id) {
+      const pdfObj = await dbObterPDFPorId(id);
+      if (!pdfObj) return;
+
+      let blob = pdfObj.blob;
+      if (!blob && pdfObj.dataUri) {
+        const byteString = atob(pdfObj.dataUri.split(',')[1]);
+        const mimeString = pdfObj.dataUri.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        blob = new Blob([ab], { type: mimeString });
+      }
+
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = pdfObj.nome || 'relatorio-sucatas.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      }
+    }
+
+    async function excluirPDF(id) {
+      Swal.fire({
+        title: 'EXCLUIR PDF?',
+        text: 'ATENÇÃO, ESTA AÇÃO NÃO PODERÁ SER DESFEITA.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#000000',
+        confirmButtonText: 'EXCLUIR',
+        cancelButtonText: 'CANCELAR'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await dbExcluirPDF(id);
+          await renderizarGridPDFs();
+          Swal.fire({
+            icon: 'success',
+            title: 'EXCLUÍDO!',
+            text: 'ATENÇÃO, O PDF FOI EXCLUÍDO DO HISTÓRICO.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        }
+      });
+    }
+
+    function openManager(type) {
+      activeManagerType = type;
+      editingOptionId = null;
+      document.getElementById('manager-modal').classList.add('active');
+      document.getElementById('modal-input-name').value = '';
+      
+      const subSelect = document.getElementById('modal-input-sub');
+      const title = document.getElementById('modal-title');
+
+      if (type === 'modelos') {
+        title.textContent = 'GERENCIAR MODELOS';
+        subSelect.style.display = 'block';
+        subSelect.innerHTML = '<option value="">VINCULAR A MONTADORA...</option>';
+        montadoras.forEach(m => {
+          subSelect.innerHTML += `<option value="${m.id}">${m.nome.toUpperCase()}</option>`;
+        });
+      } else if (type === 'montadoras') {
+        subSelect.style.display = 'none';
+        title.textContent = 'GERENCIAR MONTADORAS';
+      } else {
+        subSelect.style.display = 'none';
+        title.textContent = 'GERENCIAR CORES';
+      }
+
+      renderModalItems();
+    }
+
+    function closeManager() {
+      document.getElementById('manager-modal').classList.remove('active');
+      renderSelects();
+      autoFillMontadora();
+    }
+
+    function renderModalItems() {
+      const container = document.getElementById('modal-items-container');
+      container.innerHTML = '';
+
+      let list = [];
+      if (activeManagerType === 'modelos') list = modelos;
+      else if (activeManagerType === 'montadoras') list = montadoras;
+      else if (activeManagerType === 'cores') list = cores;
+
+      list.forEach(item => {
+        let subText = '';
+        if (activeManagerType === 'modelos') {
+          const parent = montadoras.find(m => m.id === item.montadoraId);
+          subText = parent ? ` (${parent.nome.toUpperCase()})` : '';
+        }
+
+        const div = document.createElement('div');
+        div.className = 'modal-item';
+        div.innerHTML = `
+          <span>${item.nome.toUpperCase()}${subText}</span>
+          <div class="modal-item-actions">
+            <button class="btn-sm btn-outline" onclick="editOptionItem('${item.id}')">✏️</button>
+            <button class="btn-sm btn-danger-outline" onclick="deleteOptionItem('${item.id}')">🗑️</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addOptionItem() {
+      const nameInput = document.getElementById('modal-input-name');
+      const val = nameInput.value.trim().toUpperCase();
+      if (!val) {
+        mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> INFORME O NOME!', nameInput);
+        return;
+      }
+
+      if (activeManagerType === 'modelos') {
+        const subSelect = document.getElementById('modal-input-sub');
+        const subVal = subSelect.value;
+        if (!subVal) {
+          mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE UMA MONTADORA PARA O MODELO!', subSelect);
+          return;
+        }
+
+        if (editingOptionId) {
+          const item = modelos.find(m => m.id === editingOptionId);
+          if (item) { item.nome = val; item.montadoraId = subVal; }
+        } else {
+          modelos.push({ id: 'mod_' + Date.now(), nome: val, montadoraId: subVal });
+        }
+      } else if (activeManagerType === 'montadoras') {
+        if (editingOptionId) {
+          const item = montadoras.find(m => m.id === editingOptionId);
+          if (item) item.nome = val;
+        } else {
+          montadoras.push({ id: 'm_' + Date.now(), nome: val });
+        }
+      } else if (activeManagerType === 'cores') {
+        if (editingOptionId) {
+          const item = cores.find(c => c.id === editingOptionId);
+          if (item) item.nome = val;
+        } else {
+          cores.push({ id: 'c_' + Date.now(), nome: val });
+        }
+      }
+
+      editingOptionId = null;
+      nameInput.value = '';
+      renderSelects();
+      renderModalItems();
+    }
+
+    function editOptionItem(id) {
+      editingOptionId = id;
+      if (activeManagerType === 'modelos') {
+        const item = modelos.find(m => m.id === id);
+        if (item) {
+          document.getElementById('modal-input-name').value = item.nome.toUpperCase();
+          document.getElementById('modal-input-sub').value = item.montadoraId;
+        }
+      } else if (activeManagerType === 'montadoras') {
+        const item = montadoras.find(m => m.id === id);
+        if (item) {
+          document.getElementById('modal-input-name').value = item.nome.toUpperCase();
+        }
+      } else if (activeManagerType === 'cores') {
+        const item = cores.find(c => c.id === id);
+        if (item) {
+          document.getElementById('modal-input-name').value = item.nome.toUpperCase();
+        }
+      }
+    }
+
+    function deleteOptionItem(id) {
+      Swal.fire({
+        title: 'EXCLUIR ITEM?',
+        text: 'DESEJA REALMENTE REMOVER ESTE ITEM?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#000000',
+        confirmButtonText: 'EXCLUIR',
+        cancelButtonText: 'CANCELAR'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (activeManagerType === 'modelos') {
+            modelos = modelos.filter(m => m.id !== id);
+          } else if (activeManagerType === 'montadoras') {
+            montadoras = montadoras.filter(m => m.id !== id);
+          } else if (activeManagerType === 'cores') {
+            cores = cores.filter(c => c.id !== id);
+          }
+
+          renderSelects();
+          renderModalItems();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
