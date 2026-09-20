@@ -1508,7 +1508,7 @@
       });
     }
 
-    async function gerarPDFPersonalizado() {
+async function gerarPDFPersonalizado() {
         if (!validarGeracaoPDF()) return;
 
         const atividade = document.getElementById('header-atividade').value.trim();
@@ -1590,12 +1590,15 @@
             pdf.text('RELATÓRIO DE SUCATAS REGISTRADAS', pageWidth / 2, curY, { align: 'center' });
             curY += 7;
 
-            // Parâmetros ajustados para caber exatamente 5 imagens por linha no PDF (largura ~32mm cada)
             const imgWidth = 32;
             const imgHeight = 32;
             const gapX = 2.5;
             const gapY = 3;
             const imgsPerRow = 5;
+
+            let sucatasNaPaginaAtual = 0;
+            // Limite rigoroso: 2 sucatas na 1ª página (devido ao cabeçalho) e exatamente 4 sucatas a partir da 2ª página
+            let limitePaginaAtual = 2;
 
             for (let i = 0; i < registros.length; i++) {
                 const reg = registros[i];
@@ -1610,9 +1613,12 @@
                     cardBodyHeight += 9;
                 }
 
-                if (curY + cardBodyHeight > pageHeight - 12) {
+                // Verifica se atingiu o limite de sucatas por página ou se vai estourar a altura da página
+                if (sucatasNaPaginaAtual >= limitePaginaAtual || (curY + cardBodyHeight > pageHeight - 12)) {
                     pdf.addPage();
                     curY = 12;
+                    sucatasNaPaginaAtual = 0;
+                    limitePaginaAtual = 4; // A partir da 2ª página em diante, o limite passa a ser exatamente 4 sucatas
                 }
 
                 const cardStartY = curY;
@@ -1699,6 +1705,7 @@
                 pdf.rect(marginX, cardStartY, cardWidth, finalCardHeight, 'S');
 
                 curY += 4;
+                sucatasNaPaginaAtual++;
             }
 
             const pdfBlob = pdf.output('blob');
