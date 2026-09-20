@@ -214,16 +214,17 @@
       margin-top: 2px;
     }
 
+    /* Grade para 5 imagens na mesma linha na tela */
     .images-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: flex-start;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      width: 100%;
     }
 
     .item-image {
-      width: 240px;
-      height: 240px;
+      width: 100%;
+      height: 95px;
       object-fit: contain;
       border-radius: var(--radius);
       border: 1px solid var(--border-color);
@@ -233,7 +234,7 @@
     }
 
     .item-image:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
@@ -368,8 +369,8 @@
 
     .preview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
     }
 
     .preview-thumb-box {
@@ -392,15 +393,15 @@
 
     .preview-thumb-remove {
       position: absolute;
-      top: 3px;
-      right: 3px;
+      top: 2px;
+      right: 2px;
       background: rgba(185, 28, 28, 0.9);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      font-size: 11px;
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -727,7 +728,6 @@
           req.onerror = () => reject(req.error);
         });
       } catch (err) {
-        console.warn('Fallback para LocalStorage', err);
         salvarPDFLocalStorageFallback(pdfObj);
       }
     }
@@ -1259,7 +1259,7 @@
       try {
         localStorage.setItem(STORAGE_KEYS.REGISTROS, JSON.stringify(registros));
       } catch (e) {
-          mostrarAlertaAviso('MEMÓRIA CHEIA', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> O SEU NAVEGADOR ESTÁ SEM ESPAÇO NA MEMÓRIA. POR FAVOR, APAGUE ALGUNS REGISTROS ANTIGOS OU REDUZA O NÚMERO DE FOTOS.');
+          mostrarAlertaAviso('MEMÓRIA CHEIA', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> O SEU NAVEGADOR ESTÁ SEM ESPAÇO NA MEMÓRIA.');
           return;
       }
 
@@ -1508,9 +1508,6 @@
       });
     }
 
-    // -----------------------------------------------------------
-    // GERAÇÃO DE PDF OFICIAL JS-PDF COM CARD ÚNICO ENVOLVENTE
-    // -----------------------------------------------------------
     async function gerarPDFPersonalizado() {
         if (!validarGeracaoPDF()) return;
 
@@ -1541,10 +1538,9 @@
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
             const marginX = 14;
-            const cardWidth = pageWidth - (marginX * 2); // 182 mm
+            const cardWidth = pageWidth - (marginX * 2);
             let curY = 10;
 
-            // 1. Brasão Otimizado e Cabeçalho Oficial
             const logoInfo = await obterBrasaoBase64();
             if (logoInfo && logoInfo.data) {
                 pdf.addImage(logoInfo.data, logoInfo.format, pageWidth / 2 - 12, curY, 24, 24, undefined, 'FAST');
@@ -1566,7 +1562,6 @@
             pdf.text('DIRETORIA GERAL DAS ATIVIDADES DE DESMONTAGEM', pageWidth / 2, curY, { align: 'center' });
             curY += 10;
 
-            // 2. Caixas de Informação Gerais
             const drawInfoBox = (x, yPos, w, label, value) => {
                 pdf.setFillColor(249, 250, 251); 
                 pdf.setDrawColor(220, 220, 220);
@@ -1589,37 +1584,32 @@
             drawInfoBox(148, curY, 48, 'DATA:', dataBR);
             curY += 18;
 
-            // 3. Título Principal
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(11);
             pdf.setTextColor(0, 0, 0);
             pdf.text('RELATÓRIO DE SUCATAS REGISTRADAS', pageWidth / 2, curY, { align: 'center' });
             curY += 7;
 
-            // 4. Parâmetros das Miniaturas Proporcionais (reduzidas de 56 para 42 mm)
-            const imgWidth = 42;
-            const imgHeight = 42;
-            const gapX = 3.5;
-            const gapY = 4;
-            const imgsPerRow = 4; // Até 4 imagens por linha de forma harmônica
+            // Parâmetros ajustados para caber exatamente 5 imagens por linha no PDF (largura ~32mm cada)
+            const imgWidth = 32;
+            const imgHeight = 32;
+            const gapX = 2.5;
+            const gapY = 3;
+            const imgsPerRow = 5;
 
-            // 5. Renderização em Card Único com Linha Envolvente
             for (let i = 0; i < registros.length; i++) {
                 const reg = registros[i];
                 const imgs = reg.imagens || (reg.imagem ? [reg.imagem] : []);
 
-                // Cálculo prévio da altura exata do Card Único
-                // Cabeçalho (7.5) + Dados Veículo (10.5) + Identificação (10.5) = 28.5 mm
                 let cardBodyHeight = 7.5 + 10.5 + 10.5;
 
                 if (imgs.length > 0) {
                     const numRows = Math.ceil(imgs.length / imgsPerRow);
-                    cardBodyHeight += 4 + (numRows * imgHeight) + ((numRows - 1) * gapY) + 4; // Padding interno
+                    cardBodyHeight += 4 + (numRows * imgHeight) + ((numRows - 1) * gapY) + 4;
                 } else {
-                    cardBodyHeight += 9; // Linha informativa "Nenhuma imagem"
+                    cardBodyHeight += 9;
                 }
 
-                // Quebra de página inteligente se não couber
                 if (curY + cardBodyHeight > pageHeight - 12) {
                     pdf.addPage();
                     curY = 12;
@@ -1627,7 +1617,6 @@
 
                 const cardStartY = curY;
 
-                // --- 1. Topo do Card (Faixa Escura) ---
                 pdf.setFillColor(31, 41, 55);
                 pdf.rect(marginX, curY, cardWidth, 7.5, 'F');
                 pdf.setFont('helvetica', 'bold');
@@ -1636,7 +1625,6 @@
                 pdf.text(`SUCATA #${String(i + 1).padStart(2, '0')}`, marginX + 3, curY + 5.2);
                 curY += 7.5;
 
-                // --- 2. Linha 1: Modelo / Montadora / Cor ---
                 pdf.setFillColor(250, 250, 250);
                 pdf.setDrawColor(225, 225, 225);
                 pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
@@ -1657,7 +1645,6 @@
                 pdf.text(reg.cor || 'N/A', marginX + (colWidth * 2) + 3, curY + 8.2);
                 curY += 10.5;
 
-                // --- 3. Linha 2: Chassi / Placa / VIS ---
                 pdf.setFillColor(255, 255, 255);
                 pdf.setDrawColor(225, 225, 225);
                 pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
@@ -1673,7 +1660,6 @@
                 pdf.text(reg.placa || 'SEM IDENTIFICAÇÃO', marginX + 3, curY + 8.2);
                 curY += 10.5;
 
-                // --- 4. Área das Miniaturas Proporcionais ---
                 if (imgs.length > 0) {
                     curY += 3.5;
                     let currentX = marginX + 3;
@@ -1707,17 +1693,14 @@
                     curY += 8.5;
                 }
 
-                // --- 5. Borda Envolvente do Card Único ---
                 const finalCardHeight = curY - cardStartY;
                 pdf.setDrawColor(180, 185, 195);
                 pdf.setLineWidth(0.35);
                 pdf.rect(marginX, cardStartY, cardWidth, finalCardHeight, 'S');
 
-                // Espaçamento reduzido entre sucatas
                 curY += 4;
             }
 
-            // 6. Salvamento Otimizado
             const pdfBlob = pdf.output('blob');
             const pdfDataUri = pdf.output('datauristring');
 
