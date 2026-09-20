@@ -1508,7 +1508,7 @@
       });
     }
 
-async function gerarPDFPersonalizado() {
+    async function gerarPDFPersonalizado() {
         if (!validarGeracaoPDF()) return;
 
         const atividade = document.getElementById('header-atividade').value.trim();
@@ -1536,6 +1536,7 @@ async function gerarPDFPersonalizado() {
             });
 
             const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
             const marginX = 14;
             const cardWidth = pageWidth - (marginX * 2);
             let curY = 10;
@@ -1543,121 +1544,124 @@ async function gerarPDFPersonalizado() {
             const logoInfo = await obterBrasaoBase64();
             if (logoInfo && logoInfo.data) {
                 pdf.addImage(logoInfo.data, logoInfo.format, pageWidth / 2 - 12, curY, 24, 24, undefined, 'FAST');
-                curY += 28; 
+                curY += 32; 
             } else {
-                curY += 8;
+                curY += 10;
             }
 
             pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(11);
+            pdf.setFontSize(12);
             pdf.setTextColor(0, 0, 0);
             pdf.text('GOVERNO DO ESTADO DO RIO DE JANEIRO', pageWidth / 2, curY, { align: 'center' });
-            curY += 5;
-            pdf.setFontSize(9.5);
+            curY += 5.5;
+            pdf.setFontSize(10);
             pdf.text('DEPARTAMENTO DE TRÂNSITO DO ESTADO DO RIO DE JANEIRO - DETRAN RJ', pageWidth / 2, curY, { align: 'center' });
-            curY += 5;
+            curY += 5.5;
             pdf.setFont('helvetica', 'normal');
-            pdf.setFontSize(8.5);
+            pdf.setFontSize(9);
             pdf.text('DIRETORIA GERAL DAS ATIVIDADES DE DESMONTAGEM', pageWidth / 2, curY, { align: 'center' });
-            curY += 8;
+            curY += 10;
 
             const drawInfoBox = (x, yPos, w, label, value) => {
                 pdf.setFillColor(249, 250, 251); 
                 pdf.setDrawColor(220, 220, 220);
-                pdf.roundedRect(x, yPos, w, 10, 1.5, 1.5, 'FD');
+                pdf.roundedRect(x, yPos, w, 11, 1.5, 1.5, 'FD');
                 
-                pdf.setFontSize(6.5);
+                pdf.setFontSize(7);
                 pdf.setTextColor(100, 100, 100); 
                 pdf.setFont('helvetica', 'bold');
-                pdf.text(label, x + 3, yPos + 3.5);
+                pdf.text(label, x + 3, yPos + 4);
                 
-                pdf.setFontSize(8.5);
+                pdf.setFontSize(9);
                 pdf.setTextColor(0, 0, 0);
                 pdf.setFont('helvetica', 'normal');
-                pdf.text(value, x + 3, yPos + 8);
+                pdf.text(value, x + 3, yPos + 9);
             };
 
             drawInfoBox(marginX, curY, cardWidth, 'NATUREZA DA FISCALIZAÇÃO:', atividade.toUpperCase());
-            curY += 12;
+            curY += 13;
             drawInfoBox(marginX, curY, 130, 'LOCAL:', local.toUpperCase());
             drawInfoBox(148, curY, 48, 'DATA:', dataBR);
-            curY += 15;
+            curY += 18;
 
             pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(10);
+            pdf.setFontSize(11);
             pdf.setTextColor(0, 0, 0);
             pdf.text('RELATÓRIO DE SUCATAS REGISTRADAS', pageWidth / 2, curY, { align: 'center' });
-            curY += 6;
+            curY += 7;
 
-            const imgWidth = 25;
-            const imgHeight = 25;
-            const gapX = 2;
-            const gapY = 2;
+            // Parâmetros ajustados para caber exatamente 5 imagens por linha no PDF (largura ~32mm cada)
+            const imgWidth = 32;
+            const imgHeight = 32;
+            const gapX = 2.5;
+            const gapY = 3;
             const imgsPerRow = 5;
-
-            let sucatasNaPaginaAtual = 0;
-            // Na primeira página, permitimos no máximo 2 sucatas devido ao cabeçalho institucional
-            let limitePaginaAtual = 2; 
 
             for (let i = 0; i < registros.length; i++) {
                 const reg = registros[i];
                 const imgs = reg.imagens || (reg.imagem ? [reg.imagem] : []);
 
-                // Se o contador atingiu o limite da página atual, força nova página imediatamente
-                if (sucatasNaPaginaAtual >= limitePaginaAtual) {
+                let cardBodyHeight = 7.5 + 10.5 + 10.5;
+
+                if (imgs.length > 0) {
+                    const numRows = Math.ceil(imgs.length / imgsPerRow);
+                    cardBodyHeight += 4 + (numRows * imgHeight) + ((numRows - 1) * gapY) + 4;
+                } else {
+                    cardBodyHeight += 9;
+                }
+
+                if (curY + cardBodyHeight > pageHeight - 12) {
                     pdf.addPage();
-                    curY = 12; // Reseta a margem superior na nova página
-                    sucatasNaPaginaAtual = 0;
-                    limitePaginaAtual = 4; // A partir da 2ª página em diante, o limite é rigorosamente 4 sucatas
+                    curY = 12;
                 }
 
                 const cardStartY = curY;
 
                 pdf.setFillColor(31, 41, 55);
-                pdf.rect(marginX, curY, cardWidth, 6.5, 'F');
+                pdf.rect(marginX, curY, cardWidth, 7.5, 'F');
                 pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(8);
+                pdf.setFontSize(8.5);
                 pdf.setTextColor(255, 255, 255);
-                pdf.text(`SUCATA #${String(i + 1).padStart(2, '0')}`, marginX + 3, curY + 4.5);
-                curY += 6.5;
+                pdf.text(`SUCATA #${String(i + 1).padStart(2, '0')}`, marginX + 3, curY + 5.2);
+                curY += 7.5;
 
                 pdf.setFillColor(250, 250, 250);
                 pdf.setDrawColor(225, 225, 225);
-                pdf.rect(marginX, curY, cardWidth, 9, 'FD');
+                pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
 
                 const colWidth = cardWidth / 3;
                 pdf.setTextColor(110, 110, 110);
                 pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(6);
-                pdf.text('MODELO:', marginX + 3, curY + 3.5);
-                pdf.text('MONTADORA:', marginX + colWidth + 3, curY + 3.5);
-                pdf.text('COR:', marginX + (colWidth * 2) + 3, curY + 3.5);
+                pdf.setFontSize(6.5);
+                pdf.text('MODELO:', marginX + 3, curY + 4);
+                pdf.text('MONTADORA:', marginX + colWidth + 3, curY + 4);
+                pdf.text('COR:', marginX + (colWidth * 2) + 3, curY + 4);
 
                 pdf.setTextColor(17, 24, 39);
                 pdf.setFont('helvetica', 'normal');
-                pdf.setFontSize(7.5);
-                pdf.text(reg.modelo || 'N/A', marginX + 3, curY + 7.2);
-                pdf.text(reg.montadora || 'N/A', marginX + colWidth + 3, curY + 7.2);
-                pdf.text(reg.cor || 'N/A', marginX + (colWidth * 2) + 3, curY + 7.2);
-                curY += 9;
+                pdf.setFontSize(8);
+                pdf.text(reg.modelo || 'N/A', marginX + 3, curY + 8.2);
+                pdf.text(reg.montadora || 'N/A', marginX + colWidth + 3, curY + 8.2);
+                pdf.text(reg.cor || 'N/A', marginX + (colWidth * 2) + 3, curY + 8.2);
+                curY += 10.5;
 
                 pdf.setFillColor(255, 255, 255);
                 pdf.setDrawColor(225, 225, 225);
-                pdf.rect(marginX, curY, cardWidth, 9, 'FD');
+                pdf.rect(marginX, curY, cardWidth, 10.5, 'FD');
 
                 pdf.setTextColor(110, 110, 110);
                 pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(6);
-                pdf.text('CHASSI / PLACA / VIS:', marginX + 3, curY + 3.5);
+                pdf.setFontSize(6.5);
+                pdf.text('CHASSI / PLACA / VIS:', marginX + 3, curY + 4);
 
                 pdf.setTextColor(17, 24, 39);
                 pdf.setFont('helvetica', 'normal');
-                pdf.setFontSize(7.5);
-                pdf.text(reg.placa || 'SEM IDENTIFICAÇÃO', marginX + 3, curY + 7.2);
-                curY += 9;
+                pdf.setFontSize(8.5);
+                pdf.text(reg.placa || 'SEM IDENTIFICAÇÃO', marginX + 3, curY + 8.2);
+                curY += 10.5;
 
                 if (imgs.length > 0) {
-                    curY += 2.5;
+                    curY += 3.5;
                     let currentX = marginX + 3;
                     let imgRowStartY = curY;
 
@@ -1680,22 +1684,21 @@ async function gerarPDFPersonalizado() {
 
                         currentX += imgWidth + gapX;
                     }
-                    curY = imgRowStartY + imgHeight + 3;
+                    curY = imgRowStartY + imgHeight + 4;
                 } else {
                     pdf.setFont('helvetica', 'italic');
-                    pdf.setFontSize(7);
+                    pdf.setFontSize(7.5);
                     pdf.setTextColor(150, 150, 150);
-                    pdf.text('Nenhuma imagem anexada.', marginX + 3, curY + 4.5);
-                    curY += 7;
+                    pdf.text('Nenhuma imagem anexada.', marginX + 3, curY + 5.5);
+                    curY += 8.5;
                 }
 
                 const finalCardHeight = curY - cardStartY;
                 pdf.setDrawColor(180, 185, 195);
-                pdf.setLineWidth(0.3);
+                pdf.setLineWidth(0.35);
                 pdf.rect(marginX, cardStartY, cardWidth, finalCardHeight, 'S');
 
-                curY += 4; // Espaçamento fixo entre os cards
-                sucatasNaPaginaAtual++;
+                curY += 4;
             }
 
             const pdfBlob = pdf.output('blob');
