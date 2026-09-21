@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CONTROLE DE CARGA</title>
+  <title>CONTROLE DE CARGAS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
@@ -559,13 +559,13 @@
 
 <body class="bg-[#f1f5f9] text-gray-800 font-sans min-h-screen antialiased pb-12">
 
-  <header class="bg-blue-900 text-white shadow-md no-print">
+  <header class="bg-gray-900 text-white shadow-md no-print">
       <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col items-center justify-center text-center">
-          <div class="bg-white p-1.5 rounded-lg shadow-sm mb-2">
+          <div class="bg-blue p-1.5 rounded-lg shadow-sm mb-2">
               <img id="appLogo" class="h-64 object-contain" alt="Logo DGAD">
           </div>
           <div>
-              <h1 class="font-bold text-base md:text-lg leading-tight uppercase">controle de carga</h1>
+              <h1 class="font-bold text-base md:text-lg leading-tight uppercase">controle de cargas</h1>
               <p class="text-xs text-blue-200 uppercase">sistema integrado - equipe operacional</p>
           </div>
       </div>
@@ -735,7 +735,7 @@
   </div>
 
   <script>
-    const LOGO_DGAD_SUPORTE = "ChatGPT Image 19 de set. de 2026, 23_31_32.png";
+    const LOGO_DGAD_SUPORTE = "carga sem fundo.png";
 
     const STORAGE_KEYS = {
       HEADER: 'detran_header_data_carga',
@@ -1668,7 +1668,7 @@
         const dataInicioBR = datasOrdenadas[0].split('-').reverse().join('-');
         const dataFimBR = datasOrdenadas[datasOrdenadas.length - 1].split('-').reverse().join('-');
         const periodoStr = datasOrdenadas.length > 1 ? `${dataInicioBR}_A_${dataFimBR}` : dataInicioBR;
-        const nomeArquivo = `CONTROLE DE CARGA - ${cleanAtividade.toUpperCase()} - ${cleanLocal.toUpperCase()} - ${periodoStr}.pdf`;
+        const nomeArquivo = `CONTROLE DE CARGAS - ${cleanAtividade.toUpperCase()} - ${cleanLocal.toUpperCase()} - ${periodoStr}.pdf`;
 
         Swal.fire({
             title: 'GERANDO PDF...',
@@ -1739,7 +1739,7 @@
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(11);
             pdf.setTextColor(0, 0, 0);
-            pdf.text('RELATÓRIO DE CONTROLE DE CARGA', pageWidth / 2, curY, { align: 'center' });
+            pdf.text('RELATÓRIO DE CONTROLE DE CARGAS', pageWidth / 2, curY, { align: 'center' });
             curY += 7;
 
             const imgWidth = 31;
@@ -1908,7 +1908,7 @@
             Swal.fire({
                 icon: 'error',
                 title: 'ERRO AO GERAR PDF',
-                text: 'ATENÇÃO, OCORREU UM PROBLEMA AO GERAR O CONTROLE DE CARGA.',
+                text: 'ATENÇÃO, OCORREU UM PROBLEMA AO GERAR O CONTROLE DE CARGAS.',
                 confirmButtonColor: '#000000'
             });
         }
@@ -1923,7 +1923,7 @@
             await navigator.share({
               files: [arquivo],
               title: nomeArquivo,
-              text: 'CONTROLE DE CARGA - DETRAN RJ'
+              text: 'CONTROLE DE CARGAS - DETRAN RJ'
             });
             return true;
           }
@@ -1941,7 +1941,7 @@
       const local = document.getElementById('header-local').value.toUpperCase();
       const { agrupadosPorData, datasOrdenadas } = obterTodasAsCargasOrdenadas();
 
-      let mensagem = `*RELATÓRIO DE CONTROLE DE CARGA - DETRAN RJ*\n\n`;
+      let mensagem = `*RELATÓRIO DE CONTROLE DE CARGAS - DETRAN RJ*\n\n`;
       mensagem += `🧐 *FISCALIZAÇÃO:* ${atividade}\n`;
       mensagem += `📍 *LOCAL:* ${local}\n`;
 
