@@ -32,21 +32,22 @@
                 </div>
             </div>
 
-            <!-- Menu Desktop (Visível apenas em telas grandes/desktops - xl em diante) -->
-            <nav class="hidden xl:flex items-center space-x-1 lg:space-x-3 text-xs uppercase font-bold tracking-wider">
-                <a href="index.html" class="px-3 py-2 rounded bg-gray-800 text-amber-400 transition"><i class="fa-solid fa-house mr-1"></i> Início</a>
-                <a href="carro.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-car mr-1"></i> RASTREABILIDADE DE CARRO</a>
-                <a href="moto.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-motorcycle mr-1"></i> RASTREABILIDADE DE MOTO</a>
-                <a href="caminhão-ônibus.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-truck mr-1">
-                    
-</i> RASTREABILIDADE DE CAMINHÃO/ÔNIBUS</a>
-                <a href="sucata.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-recycle mr-1"></i> CONTROLE DE SUCATAS</a>
-                <a href="controle_carga.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-truck-ramp-box mr-1"></i> CONTROLE DE CARGAS</a>
-                <a href="suporte.html" class="px-3 py-2 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-headset mr-1"></i> SUPORTE TÉCNICO</a>
+            <!-- Menu Desktop (Visível apenas em telas grandes - 2xl) -->
+            <nav class="hidden 2xl:flex items-center space-x-1 text-[11px] uppercase font-bold tracking-wider flex-wrap">
+                <a href="index.html" class="px-2.5 py-1.5 rounded bg-gray-800 text-amber-400 transition"><i class="fa-solid fa-house mr-1"></i> Início</a>
+                <a href="carro.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-car mr-1"></i> Rastreabilidade de Carro</a>
+                <a href="moto.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-motorcycle mr-1"></i> Rastreabilidade de Moto</a>
+                <a href="caminhão-ônibus.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-truck mr-1"></i> Rastreabilidade de Caminhão/Ônibus</a>
+                <a href="sucata.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-recycle mr-1"></i> Controle de Sucatas</a>
+                <a href="controle_carga.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-truck-ramp-box mr-1"></i> Controle de Cargas</a>
+                <a href="suporte.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-headset mr-1"></i> Suporte Técnico</a>
+                <a href="auto_apreensao_sucata.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-file-shield mr-1"></i> Auto de Apreensão de sucata</a>
+                <a href="auto_infracao.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Auto de Infração</a>
+                <a href="termo_interdicao_fiel_depositario.html" class="px-2.5 py-1.5 rounded hover:bg-gray-800 text-gray-300 hover:text-white transition"><i class="fa-solid fa-ban mr-1"></i> Termo de Interdição e Fiel Depositário</a>
             </nav>
 
-            <!-- Botão Menu Mobile e Tablet (Exibido até telas de 1280px) -->
-            <div class="xl:hidden flex items-center">
+            <!-- Botão Menu Mobile e Tablet -->
+            <div class="2xl:hidden flex items-center">
                 <button id="menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2" aria-label="Abrir menu">
                     <i class="fa-solid fa-bars text-2xl"></i>
                 </button>
@@ -54,26 +55,29 @@
         </div>
 
         <!-- Menu Dropdown Mobile e Tablet -->
-        <div id="mobile-menu" class="hidden xl:hidden bg-gray-800 border-t border-gray-700 px-4 pt-2 pb-4 space-y-1">
+        <div id="mobile-menu" class="hidden 2xl:hidden bg-gray-800 border-t border-gray-700 px-4 pt-2 pb-4 space-y-1">
             <a href="index.html" class="block px-3 py-2 rounded text-amber-400 font-bold text-sm uppercase"><i class="fa-solid fa-house mr-2"></i> Início</a>
-            <a href="carro.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-car mr-2"></i> RASTREABILIDADE DE CARRO</a>
-            <a href="moto.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-motorcycle mr-2"></i> RASTREABILIDADE DE MOTO</a>
-            <a href="caminhão-ônibus.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-truck mr-2"></i> RASTREABILIDADE DE CAMINHÃO/ÔNIBUS</a>
-            <a href="sucata.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-recycle mr-2"></i> CONTROLE DE SUCATAS</a>
-            <a href="controle_carga.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-truck-ramp-box mr-2"></i> CONTROLE DE CARGAS</a>
-            <a href="suporte.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-headset mr-2"></i> SUPORTE TÉCNICO</a>
+            <a href="carro.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-car mr-2"></i> Rastreabilidade de Carro</a>
+            <a href="moto.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-motorcycle mr-2"></i> Rastreabilidade de Moto</a>
+            <a href="caminhão-ônibus.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-truck mr-2"></i> Rastreabilidade de Caminhão/Ônibus</a>
+            <a href="sucata.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-recycle mr-2"></i> Controle de Sucatas</a>
+            <a href="controle_carga.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-truck-ramp-box mr-2"></i> Controle de Cargas</a>
+            <a href="suporte.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-headset mr-2"></i> Suporte Técnico</a>
+            <a href="auto_apreensao_sucata.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-file-shield mr-2"></i> Auto de Apreensão de Sucata</a>
+            <a href="auto_infracao.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Auto de Infração</a>
+            <a href="termo_interdicao_fiel_depositario.html" class="block px-3 py-2 rounded text-gray-300 hover:bg-gray-700 hover:text-white text-sm uppercase"><i class="fa-solid fa-ban mr-2"></i> Termo de Interdição e Fiel Depositário</a>
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL (Exibido apenas na Página Inicial) -->
+    <!-- CONTEÚDO PRINCIPAL (Exibido na Página Inicial) -->
     <main id="conteudo-inicial" class="flex-grow w-full pb-8">
 
-        <!-- BANNER DE LARGURA TOTAL COM ENQUADRAMENTO COMPLETO -->
-<div class="w-full bg-gray-900 shadow-sm border-b border-gray-300 mb-8">
-    <img src="Gemini_Generated_Image_3i6fba3i6fba3i6f.jpg" 
-         alt="Banner DGAD - Sistema Integrado Equipe Operacional" 
-         class="w-full h-auto block">
-</div>
+        <!-- BANNER DE LARGURA TOTAL -->
+        <div class="w-full bg-gray-900 shadow-sm border-b border-gray-300 mb-8">
+            <img src="BANNER EQUIPE OPERACIONAL.jpg" 
+                 alt="Banner DGAD - Sistema Integrado Equipe Operacional" 
+                 class="w-full h-auto block">
+        </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Cabeçalho Institucional -->
@@ -83,75 +87,104 @@
                 <div class="w-24 h-1 bg-amber-500 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- Grade de Ícones / Páginas -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+            <!-- Grade de Ícones / Páginas (Agora com 9 Módulos) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <!-- Card Carro -->
                 <a href="carro.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CARRO SEM FUNDO.png" alt="Módulo Carro" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE CARRO</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Peças de rastreabilidade obrigatória</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Moto -->
                 <a href="moto.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="MOTO SEM FUNDO.png" alt="Módulo Moto" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE MOTO</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Peças de rastreabilidade obrigatória</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Caminhão/Ônibus -->
                 <a href="caminhão-ônibus.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CAMINHAO E ONIBUS SEM FUNDO.png" alt="Módulo Caminhão / Ônibus" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">RASTREABILIDADE DE CAMINHÃO/ÔNIBUS</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">peças de rastreabilidade obrigatória.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Peças de rastreabilidade obrigatória</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Sucata -->
                 <a href="sucata.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="SUCATAS SEM FUNDO.png" alt="Módulo Sucata" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">CONTROLE DE SUCATAS</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de sucatas recolhidas.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de sucatas recolhidas</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Controle de Carga -->
                 <a href="controle_carga.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="CARGA SEM FUNDO.png" alt="Módulo Controle de Cargas" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">CONTROLE DE CARGAS</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de cargas operacionais.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de cargas operacionais</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
                 <!-- Card Suporte -->
                 <a href="suporte.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
-                    <div class="w-full aspect-square max-w-[400px] rounded-2xl border-4 border-amber-500 mb-6 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
                         <img src="SUPORTE SEM FUNDO.png" alt="Módulo Suporte" class="w-full h-full object-contain">
                     </div>
                     <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">SUPORTE TÉCNICO</h2>
-                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento e controle de treinamentos ministrados nas empresas credenciadas.</p>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Gerenciamento de treinamentos do Sistema Desmonte.RJ</p>
+                    <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                </a>
+
+                <!-- Card 7: Auto de Apreensão de Sucata -->
+                <a href="auto_apreensao_sucata.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                        <img src="apreensão SEM FUNDO.png" alt="Módulo Suporte" class="w-full h-full object-contain">
+                    </div>
+                    <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">AUTO DE APREENSÃO DE SUCATA</h2>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Emissão oficial de auto de apreensão de sucata</p>
+                    <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                </a>
+
+                <!-- Card 8: Modelo Auto de Infração -->
+                <a href="auto_infracao.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                        <img src="infração sem fundo.png" alt="Módulo Suporte" class="w-full h-full object-contain">
+                    </div>
+                    <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">AUTO DE INFRAÇÃO</h2>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Lavratura de auto de infração e tipificação legal conforme Lei 12.977/14</p>
+                    <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                </a>
+
+                <!-- Card 9: Termo de Interdição e Fiel Depositário -->
+                <a href="termo_interdicao_fiel_depositario.html" class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover transition-all flex flex-col items-center text-center group">
+                    <div class="w-full aspect-square max-w-[280px] rounded-2xl border-4 border-amber-500 mb-4 shadow-lg bg-gray-900 flex items-center justify-center p-3">
+                        <img src="FIEL DEPOSITÁRIO SEM FUNDO.png" alt="Módulo Suporte" class="w-full h-full object-contain">
+                    </div>
+                    <h2 class="font-bold text-gray-800 uppercase text-sm mb-1">INTERDIÇÃO E FIEL DEPOSITÁRIO</h2>
+                    <p class="text-xs text-gray-500 mb-4 uppercase">Interdição cautelar de estabelecimento e designação de fiel depositário</p>
                     <span class="mt-auto text-xs font-black text-gray-600 group-hover:underline uppercase tracking-wider">Acessar Módulo <i class="fa-solid fa-arrow-right ml-1"></i></span>
                 </a>
 
             </div>
         </div>
-
     </main>
 
-    <!-- ÁREA DE MÓDULOS -->
+    <!-- ÁREA DE MÓDULOS VIA IFRAME (MANTÉM O MENU SUPERIOR VISÍVEL) -->
     <section id="area-modulo" class="hidden w-full mb-10">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="flex items-center justify-between gap-3 px-4 py-3 bg-gray-900 text-white">
@@ -177,7 +210,7 @@
                 <iframe id="iframe-modulo"
                         title="Módulo do Sistema"
                         class="w-full border-0 block"
-                        style="height: calc(100vh - 80px); min-height: 900px;"
+                        style="height: calc(100vh - 120px); min-height: 900px;"
                         loading="eager"></iframe>
             </div>
         </div>
@@ -229,6 +262,18 @@
             "suporte.html": {
                 titulo: "Suporte Técnico",
                 icone: "fa-headset"
+            },
+            "auto_apreensao_sucata.html": {
+                titulo: "Auto de Apreensão de Sucata Automotiva",
+                icone: "fa-file-shield"
+            },
+            "auto_infracao.html": {
+                titulo: "Modelo de Auto de Infração",
+                icone: "fa-triangle-exclamation"
+            },
+            "termo_interdicao_fiel_depositario.html": {
+                titulo: "Termo de Interdição e Fiel Depositário",
+                icone: "fa-ban"
             }
         };
 
