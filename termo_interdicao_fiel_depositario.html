@@ -422,6 +422,19 @@
             document.getElementById('docAssPropNome').innerText = propNome !== '________________________________________________' ? propNome : 'PROPRIETÁRIO DO ESTABELECIMENTO';
             document.getElementById('docAssPropCPF').innerText = propCpf;
 
+            ['Agente', 'Proprietario'].forEach(r => {
+                const docImg = document.getElementById(`imgSign${r}`);
+                if (docImg) {
+                    if (signatures[r]) {
+                        docImg.src = signatures[r];
+                        docImg.style.display = 'block';
+                    } else {
+                        docImg.src = '';
+                        docImg.style.display = 'none';
+                    }
+                }
+            });
+
             saveDataToStorage();
         }
 
@@ -518,7 +531,7 @@
             signatures[currentTargetRole] = dataURL;
             renderSignatureUI(currentTargetRole, dataURL);
             closeSignatureModal();
-            saveDataToStorage();
+            updatePreview();
         }
 
         function renderSignatureUI(role, dataURL) {
@@ -575,6 +588,7 @@
         }
 
         async function generatePDF() {
+            updatePreview();
             if (!validateForm()) return;
             const element = document.getElementById('pdfContent');
             const est = document.getElementById('inputNomeEstabelecimento').value.trim() || 'ESTABELECIMENTO';
