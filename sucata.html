@@ -634,7 +634,7 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
-        <button id="btn-salvar" class="btn btn-dark" style="width: 120px;" onclick="salvarRegistro()">SALVAR</button>
+        <button id="btn-salvar" class="btn btn-dark" style="width: 120px;" onclick="salvarRegistro()">CADASTRAR SUCATA</button>
       </div>
     </div>
 
@@ -642,18 +642,18 @@
 
     <div class="no-print mt-2 flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
       <button class="btn btn-danger-outline" onclick="limparTabela()">🗑️ LIMPAR PÁGINA</button>
-      <button class="btn btn-green" onclick="compartilharResumo()">WHATSAPP (RESUMO)</button>
-      <button class="btn btn-dark" onclick="gerarPDFPersonalizado()">📄 GERAR PDF OFICIAL</button>
+      <button class="btn btn-green" onclick="compartilharResumo()">COMPARTILHAR RESUMO (WHATSAPP)</button>
+      <button class="btn btn-dark" onclick="gerarPDFPersonalizado()">📄 GERAR PDF</button>
     </div>
 
     <div class="card no-print" id="secao-historico-pdf" style="margin-top: 16px;">
       <div class="pdf-history-header">
         <div class="section-title" style="margin-bottom: 0;">
-          <span>📄 PDF'S GERADOS</span>
+          <span>📄 PDF'S GERADOS - RELATÓRIO DE SUCATAS</span>
         </div>
         <div class="pdf-search-wrapper" style="margin-top: 8px;">
           <span class="pdf-search-icon">🔍</span>
-          <input type="text" id="busca-pdf" oninput="renderizarGridPDFs()" placeholder="BUSCAR PDF POR ATIVIDADE, LOCAL OU DATA...">
+          <input type="text" id="busca-pdf" oninput="renderizarGridPDFs()" placeholder="BUSCAR PDF POR NATUREZA DA ATIVIDADE, ESTABELECIMENTOL OU DATA">
         </div>
       </div>
       <div class="pdf-grid" id="grid-pdfs-container"></div>
@@ -812,36 +812,699 @@
     }
 
     const defaultMontadoras = [
-      { id: 'm_gm', nome: 'CHEVROLET (GENERAL MOTORS)' },
-      { id: 'm_vw', nome: 'VOLKSWAGEN' },
-      { id: 'm_fiat', nome: 'FIAT' },
-      { id: 'm_ford', nome: 'FORD' },
-      { id: 'm_renault', nome: 'RENAULT' },
-      { id: 'm_peugeot', nome: 'PEUGEOT' },
-      { id: 'm_citroen', nome: 'CITROËN' },
-      { id: 'm_toyota', nome: 'TOYOTA' },
-      { id: 'm_honda', nome: 'HONDA' },
-      { id: 'm_hyundai', nome: 'HYUNDAI' },
-      { id: 'm_kia', nome: 'KIA' },
-      { id: 'm_gwm', nome: 'GWM' },
-      { id: 'm_byd', nome: 'BYD' }
+  { id: 'm_acura', nome: 'ACURA' },
+  { id: 'm_agrale', nome: 'AGRALE' },
+  { id: 'm_alfa_romeo', nome: 'ALFA ROMEO' },
+  { id: 'm_asia_motors', nome: 'ASIA MOTORS' },
+  { id: 'm_audi', nome: 'AUDI' },
+  { id: 'm_bmw', nome: 'BMW' },
+  { id: 'm_byd', nome: 'BYD' },
+  { id: 'm_changan', nome: 'CHANGAN' },
+  { id: 'm_chery', nome: 'CHERY' },
+  { id: 'm_chevrolet', nome: 'CHEVROLET (GENERAL MOTORS)' },
+  { id: 'm_chrysler', nome: 'CHRYSLER' },
+  { id: 'm_citroen', nome: 'CITROËN' },
+  { id: 'm_daewoo', nome: 'DAEWOO' },
+  { id: 'm_daihatsu', nome: 'DAIHATSU' },
+  { id: 'm_dodge', nome: 'DODGE' },
+  { id: 'm_effа', nome: 'EFFA' },
+  { id: 'm_fiat', nome: 'FIAT' },
+  { id: 'm_ford', nome: 'FORD' },
+  { id: 'm_gac', nome: 'GAC' },
+  { id: 'm_geely', nome: 'GEELY' },
+  { id: 'm_gurgel', nome: 'GURGEL' },
+  { id: 'm_gwm', nome: 'GWM (GREAT WALL MOTORS)' },
+  { id: 'm_hafei', nome: 'HAFEI' },
+  { id: 'm_haval', nome: 'HAVAL' },
+  { id: 'm_honda', nome: 'HONDA' },
+  { id: 'm_hyundai', nome: 'HYUNDAI' },
+  { id: 'm_iveco', nome: 'IVECO' },
+  { id: 'm_jac', nome: 'JAC MOTORS' },
+  { id: 'm_jeep', nome: 'JEEP' },
+  { id: 'm_jmc', nome: 'JMC' },
+  { id: 'm_kia', nome: 'KIA' },
+  { id: 'm_land_rover', nome: 'LAND ROVER' },
+  { id: 'm_lexus', nome: 'LEXUS' },
+  { id: 'm_lifan', nome: 'LIFAN' },
+  { id: 'm_mercedes_benz', nome: 'MERCEDES-BENZ' },
+  { id: 'm_mini', nome: 'MINI' },
+  { id: 'm_mitsubishi', nome: 'MITSUBISHI' },
+  { id: 'm_mazda', nome: 'MAZDA' },
+  { id: 'm_nissan', nome: 'NISSAN' },
+  { id: 'm_ora', nome: 'ORA' },
+  { id: 'm_omoda', nome: 'OMODA' },
+  { id: 'm_peugeot', nome: 'PEUGEOT' },
+  { id: 'm_puma', nome: 'PUMA' },
+  { id: 'm_ram', nome: 'RAM' },
+  { id: 'm_renault', nome: 'RENAULT' },
+  { id: 'm_seat', nome: 'SEAT' },
+  { id: 'm_shineray', nome: 'SHINERAY' },
+  { id: 'm_smart', nome: 'SMART' },
+  { id: 'm_ssangyong', nome: 'SSANGYONG' },
+  { id: 'm_subaru', nome: 'SUBARU' },
+  { id: 'm_suzuki', nome: 'SUZUKI' },
+  { id: 'm_tesla', nome: 'TESLA' },
+  { id: 'm_toyota', nome: 'TOYOTA' },
+  { id: 'm_troller', nome: 'TROLLER' },
+  { id: 'm_volkswagen', nome: 'VOLKSWAGEN' },
+  { id: 'm_volvo', nome: 'VOLVO' },
+
+  // MOTOCICLETAS
+
+  { id: 'm_bajaj', nome: 'BAJAJ - MOTOCICLETA' },
+  { id: 'm_dafra', nome: 'DAFRA - MOTOCICLETA' },
+  { id: 'm_kawasaki', nome: 'KAWASAKI - MOTOCICLETA' },
+  { id: 'm_ktm', nome: 'KTM - MOTOCICLETA' },
+  { id: 'm_royal_enfield', nome: 'ROYAL ENFIELD - MOTOCICLETA' },
+  { id: 'm_shineray_motos', nome: 'SHINERAY - MOTOCICLETA' },
+  { id: 'm_suzuki_motos', nome: 'SUZUKI - MOTOCICLETA' },
+  { id: 'm_triumph', nome: 'TRIUMPH - MOTOCICLETA' },
+  { id: 'm_yamaha', nome: 'YAMAHA - MOTOCICLETA' },
+  { id: 'm_zontes', nome: 'ZONTES - MOTOCICLETA' }
     ];
 
     const defaultModelos = [
-      { id: 'mod_1', nome: 'OPALA', montadoraId: 'm_gm' },
-      { id: 'mod_2', nome: 'CARAVAN', montadoraId: 'm_gm' },
-      { id: 'mod_3', nome: 'CHEVETTE', montadoraId: 'm_gm' },
-      { id: 'mod_15', nome: 'CORSA', montadoraId: 'm_gm' },
-      { id: 'mod_33', nome: 'ONIX', montadoraId: 'm_gm' },
-      { id: 'mod_47', nome: 'FUSCA', montadoraId: 'm_vw' },
-      { id: 'mod_56', nome: 'GOL', montadoraId: 'm_vw' },
-      { id: 'mod_93', nome: 'UNO', montadoraId: 'm_fiat' },
-      { id: 'mod_99', nome: 'PALIO', montadoraId: 'm_fiat' },
-      { id: 'mod_141', nome: 'FIESTA', montadoraId: 'm_ford' },
-      { id: 'mod_170', nome: 'SANDERO', montadoraId: 'm_renault' },
-      { id: 'mod_210', nome: 'COROLLA', montadoraId: 'm_toyota' },
-      { id: 'mod_220', nome: 'CIVIC', montadoraId: 'm_honda' },
-      { id: 'mod_236', nome: 'HB20', montadoraId: 'm_hyundai' }
+      // ============================================================
+  // ASIA MOTORS
+  // ============================================================
+  { id: 'mod_1', nome: 'BESTA', montadoraId: 'm_asia_motors' },
+  { id: 'mod_5', nome: 'TOPIC', montadoraId: 'm_asia_motors' },
+  { id: 'mod_6', nome: 'TOWNER', montadoraId: 'm_asia_motors' },
+
+  // ============================================================
+  // AUDI
+  // ============================================================
+  { id: 'mod_12', nome: 'A3', montadoraId: 'm_audi' },
+  { id: 'mod_13', nome: 'A4', montadoraId: 'm_audi' },
+  { id: 'mod_14', nome: 'A5', montadoraId: 'm_audi' },
+  { id: 'mod_15', nome: 'A6', montadoraId: 'm_audi' },
+  { id: 'mod_16', nome: 'A7', montadoraId: 'm_audi' },
+  { id: 'mod_17', nome: 'A8', montadoraId: 'm_audi' },
+  { id: 'mod_18', nome: 'Q3', montadoraId: 'm_audi' },
+  { id: 'mod_19', nome: 'Q5', montadoraId: 'm_audi' },
+  { id: 'mod_20', nome: 'Q7', montadoraId: 'm_audi' },
+  { id: 'mod_21', nome: 'Q8', montadoraId: 'm_audi' },
+  { id: 'mod_22', nome: 'TT', montadoraId: 'm_audi' },
+
+  // ============================================================
+  // BMW
+  // ============================================================
+  { id: 'mod_38', nome: 'SÉRIE 1', montadoraId: 'm_bmw' },
+  { id: 'mod_39', nome: 'SÉRIE 2', montadoraId: 'm_bmw' },
+  { id: 'mod_40', nome: 'SÉRIE 3', montadoraId: 'm_bmw' },
+  { id: 'mod_41', nome: 'SÉRIE 4', montadoraId: 'm_bmw' },
+  { id: 'mod_42', nome: 'SÉRIE 5', montadoraId: 'm_bmw' },
+  { id: 'mod_43', nome: 'SÉRIE 6', montadoraId: 'm_bmw' },
+  { id: 'mod_44', nome: 'SÉRIE 7', montadoraId: 'm_bmw' },
+  { id: 'mod_45', nome: 'SÉRIE 8', montadoraId: 'm_bmw' },
+  { id: 'mod_46', nome: 'X1', montadoraId: 'm_bmw' },
+  { id: 'mod_47', nome: 'X2', montadoraId: 'm_bmw' },
+  { id: 'mod_48', nome: 'X3', montadoraId: 'm_bmw' },
+  { id: 'mod_49', nome: 'X4', montadoraId: 'm_bmw' },
+  { id: 'mod_50', nome: 'X5', montadoraId: 'm_bmw' },
+  { id: 'mod_51', nome: 'X6', montadoraId: 'm_bmw' },
+  { id: 'mod_52', nome: 'X7', montadoraId: 'm_bmw' },
+  { id: 'mod_53', nome: 'Z3', montadoraId: 'm_bmw' },
+  { id: 'mod_54', nome: 'Z4', montadoraId: 'm_bmw' },
+  { id: 'mod_55', nome: 'Z8', montadoraId: 'm_bmw' },
+  { id: 'mod_56', nome: 'I3', montadoraId: 'm_bmw' },
+  { id: 'mod_57', nome: 'I4', montadoraId: 'm_bmw' },
+  { id: 'mod_58', nome: 'I5', montadoraId: 'm_bmw' },
+  { id: 'mod_59', nome: 'I7', montadoraId: 'm_bmw' },
+  { id: 'mod_60', nome: 'IX', montadoraId: 'm_bmw' },
+  { id: 'mod_61', nome: 'IX1', montadoraId: 'm_bmw' },
+  { id: 'mod_62', nome: 'IX3', montadoraId: 'm_bmw' },
+
+  // ============================================================
+  // BYD
+  // ============================================================
+  { id: 'mod_63', nome: 'DOLPHIN', montadoraId: 'm_byd' },
+  { id: 'mod_64', nome: 'DOLPHIN MINI', montadoraId: 'm_byd' },
+  { id: 'mod_65', nome: 'DOLPHIN PLUS', montadoraId: 'm_byd' },
+  { id: 'mod_66', nome: 'HAN', montadoraId: 'm_byd' },
+  { id: 'mod_67', nome: 'KING', montadoraId: 'm_byd' },
+  { id: 'mod_68', nome: 'SEAL', montadoraId: 'm_byd' },
+  { id: 'mod_69', nome: 'SONG', montadoraId: 'm_byd' },
+  { id: 'mod_70', nome: 'SONG PLUS', montadoraId: 'm_byd' },
+  { id: 'mod_71', nome: 'SONG PRO', montadoraId: 'm_byd' },
+  { id: 'mod_72', nome: 'TAN', montadoraId: 'm_byd' },
+  { id: 'mod_73', nome: 'YUAN', montadoraId: 'm_byd' },
+  { id: 'mod_74', nome: 'YUAN PLUS', montadoraId: 'm_byd' },
+  { id: 'mod_75', nome: 'YUAN PRO', montadoraId: 'm_byd' },
+  { id: 'mod_76', nome: 'SHARK', montadoraId: 'm_byd' },
+  { id: 'mod_77', nome: 'KING PLUS', montadoraId: 'm_byd' },
+
+  // ============================================================
+  // CHERY
+  // ============================================================
+  { id: 'mod_78', nome: 'QQ', montadoraId: 'm_chery' },
+  { id: 'mod_79', nome: 'QQ3', montadoraId: 'm_chery' },
+  { id: 'mod_80', nome: 'FACE', montadoraId: 'm_chery' },
+  { id: 'mod_81', nome: 'CELER', montadoraId: 'm_chery' },
+  { id: 'mod_82', nome: 'CIELO', montadoraId: 'm_chery' },
+  { id: 'mod_83', nome: 'TIGGO', montadoraId: 'm_chery' },
+  { id: 'mod_84', nome: 'TIGGO 2', montadoraId: 'm_chery' },
+  { id: 'mod_85', nome: 'TIGGO 3', montadoraId: 'm_chery' },
+  { id: 'mod_86', nome: 'TIGGO 5', montadoraId: 'm_chery' },
+  { id: 'mod_87', nome: 'TIGGO 7', montadoraId: 'm_chery' },
+  { id: 'mod_88', nome: 'TIGGO 8', montadoraId: 'm_chery' },
+  { id: 'mod_89', nome: 'ARRIZO 3', montadoraId: 'm_chery' },
+  { id: 'mod_90', nome: 'ARRIZO 5', montadoraId: 'm_chery' },
+  { id: 'mod_91', nome: 'ARRIZO 6', montadoraId: 'm_chery' },
+
+  // ============================================================
+  // CHEVROLET
+  // ============================================================
+  { id: 'mod_92', nome: 'CHEVETTE', montadoraId: 'm_chevrolet' },
+  { id: 'mod_93', nome: 'MARAJÓ', montadoraId: 'm_chevrolet' },
+  { id: 'mod_94', nome: 'MONZA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_95', nome: 'KADETT', montadoraId: 'm_chevrolet' },
+  { id: 'mod_96', nome: 'IPANEMA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_97', nome: 'OPALA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_98', nome: 'CARAVAN', montadoraId: 'm_chevrolet' },
+  { id: 'mod_99', nome: 'OMEGA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_100', nome: 'SUPREMA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_101', nome: 'CORSA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_102', nome: 'CORSA SEDAN', montadoraId: 'm_chevrolet' },
+  { id: 'mod_103', nome: 'CORSA CLASSIC', montadoraId: 'm_chevrolet' },
+  { id: 'mod_104', nome: 'CELTA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_105', nome: 'PRISMA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_106', nome: 'AGILE', montadoraId: 'm_chevrolet' },
+  { id: 'mod_107', nome: 'ASTRA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_108', nome: 'VECTRA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_109', nome: 'MERIVA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_110', nome: 'ZAFIRA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_111', nome: 'MONTANA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_112', nome: 'COBALT', montadoraId: 'm_chevrolet' },
+  { id: 'mod_113', nome: 'SONIC', montadoraId: 'm_chevrolet' },
+  { id: 'mod_114', nome: 'CRUZE', montadoraId: 'm_chevrolet' },
+  { id: 'mod_116', nome: 'ONIX', montadoraId: 'm_chevrolet' },
+  { id: 'mod_118', nome: 'SPIN', montadoraId: 'm_chevrolet' },
+  { id: 'mod_119', nome: 'TRACKER', montadoraId: 'm_chevrolet' },
+  { id: 'mod_120', nome: 'TRAILBLAZER', montadoraId: 'm_chevrolet' },
+  { id: 'mod_121', nome: 'BLAZER', montadoraId: 'm_chevrolet' },
+  { id: 'mod_122', nome: 'S10', montadoraId: 'm_chevrolet' },
+  { id: 'mod_123', nome: 'SILVERADO', montadoraId: 'm_chevrolet' },
+  { id: 'mod_125', nome: 'CAPTIVA', montadoraId: 'm_chevrolet' },
+  { id: 'mod_126', nome: 'EQUINOX', montadoraId: 'm_chevrolet' },
+  { id: 'mod_127', nome: 'CAMARO', montadoraId: 'm_chevrolet' },
+  { id: 'mod_128', nome: 'MALIBU', montadoraId: 'm_chevrolet' },
+  { id: 'mod_130', nome: 'ASTRA SEDAN', montadoraId: 'm_chevrolet' },
+  { id: 'mod_131', nome: 'CLASSIC', montadoraId: 'm_chevrolet' },
+  { id: 'mod_132', nome: 'D20', montadoraId: 'm_chevrolet' },
+  { id: 'mod_133', nome: 'C10', montadoraId: 'm_chevrolet' },
+  { id: 'mod_134', nome: 'C20', montadoraId: 'm_chevrolet' },
+  { id: 'mod_135', nome: 'C14', montadoraId: 'm_chevrolet' },
+
+  // ============================================================
+  // CITROËN
+  // ============================================================
+  { id: 'mod_136', nome: 'AX', montadoraId: 'm_citroen' },
+  { id: 'mod_137', nome: 'ZX', montadoraId: 'm_citroen' },
+  { id: 'mod_138', nome: 'XSARA', montadoraId: 'm_citroen' },
+  { id: 'mod_139', nome: 'XSARA PICASSO', montadoraId: 'm_citroen' },
+  { id: 'mod_140', nome: 'C3', montadoraId: 'm_citroen' },
+  { id: 'mod_141', nome: 'C3 PICASSO', montadoraId: 'm_citroen' },
+  { id: 'mod_143', nome: 'C3 AIRCROSS', montadoraId: 'm_citroen' },
+  { id: 'mod_144', nome: 'C4', montadoraId: 'm_citroen' },
+  { id: 'mod_145', nome: 'C4 PALLAS', montadoraId: 'm_citroen' },
+  { id: 'mod_146', nome: 'C4 LOUNGE', montadoraId: 'm_citroen' },
+  { id: 'mod_147', nome: 'C4 CACTUS', montadoraId: 'm_citroen' },
+  { id: 'mod_148', nome: 'C4 PICASSO', montadoraId: 'm_citroen' },
+  { id: 'mod_149', nome: 'C5', montadoraId: 'm_citroen' },
+  { id: 'mod_150', nome: 'C5 AIRCROSS', montadoraId: 'm_citroen' },
+  { id: 'mod_151', nome: 'C6', montadoraId: 'm_citroen' },
+  { id: 'mod_152', nome: 'BERLINGO', montadoraId: 'm_citroen' },
+  { id: 'mod_153', nome: 'JUMPER', montadoraId: 'm_citroen' },
+
+  // ============================================================
+  // FIAT
+  // ============================================================
+  { id: 'mod_155', nome: '147', montadoraId: 'm_fiat' },
+  { id: 'mod_159', nome: 'UNO', montadoraId: 'm_fiat' },
+  { id: 'mod_160', nome: 'ELBA', montadoraId: 'm_fiat' },
+  { id: 'mod_161', nome: 'PREMIO', montadoraId: 'm_fiat' },
+  { id: 'mod_162', nome: 'TEMPRA', montadoraId: 'm_fiat' },
+  { id: 'mod_163', nome: 'TIPO', montadoraId: 'm_fiat' },
+  { id: 'mod_164', nome: 'MAREA', montadoraId: 'm_fiat' },
+  { id: 'mod_165', nome: 'MAREA WEEKEND', montadoraId: 'm_fiat' },
+  { id: 'mod_166', nome: 'PALIO', montadoraId: 'm_fiat' },
+  { id: 'mod_167', nome: 'PALIO WEEKEND', montadoraId: 'm_fiat' },
+  { id: 'mod_168', nome: 'SIENA', montadoraId: 'm_fiat' },
+  { id: 'mod_169', nome: 'STRADA', montadoraId: 'm_fiat' },
+  { id: 'mod_170', nome: 'BRAVA', montadoraId: 'm_fiat' },
+  { id: 'mod_171', nome: 'STILO', montadoraId: 'm_fiat' },
+  { id: 'mod_172', nome: 'DOBLÒ', montadoraId: 'm_fiat' },
+  { id: 'mod_173', nome: 'IDEA', montadoraId: 'm_fiat' },
+  { id: 'mod_174', nome: 'PUNTO', montadoraId: 'm_fiat' },
+  { id: 'mod_175', nome: 'LINEA', montadoraId: 'm_fiat' },
+  { id: 'mod_176', nome: '500', montadoraId: 'm_fiat' },
+  { id: 'mod_177', nome: 'FREEMONT', montadoraId: 'm_fiat' },
+  { id: 'mod_178', nome: 'GRAND SIENA', montadoraId: 'm_fiat' },
+  { id: 'mod_179', nome: 'MOBI', montadoraId: 'm_fiat' },
+  { id: 'mod_180', nome: 'ARGO', montadoraId: 'm_fiat' },
+  { id: 'mod_181', nome: 'CRONOS', montadoraId: 'm_fiat' },
+  { id: 'mod_182', nome: 'TORO', montadoraId: 'm_fiat' },
+  { id: 'mod_183', nome: 'FASTBACK', montadoraId: 'm_fiat' },
+  { id: 'mod_184', nome: 'PULSE', montadoraId: 'm_fiat' },
+  { id: 'mod_186', nome: 'FIORINO', montadoraId: 'm_fiat' },
+  { id: 'mod_187', nome: 'DUCATO', montadoraId: 'm_fiat' },
+  { id: 'mod_188', nome: 'SCUDO', montadoraId: 'm_fiat' },
+
+  // ============================================================
+  // FORD
+  // ============================================================
+  { id: 'mod_190', nome: 'CORCEL', montadoraId: 'm_ford' },
+  { id: 'mod_192', nome: 'DEL REY', montadoraId: 'm_ford' },
+  { id: 'mod_193', nome: 'BELINA', montadoraId: 'm_ford' },
+  { id: 'mod_194', nome: 'PAMPA', montadoraId: 'm_ford' },
+  { id: 'mod_195', nome: 'ESCORT', montadoraId: 'm_ford' },
+  { id: 'mod_196', nome: 'VERONA', montadoraId: 'm_ford' },
+  { id: 'mod_197', nome: 'VERSAILLES', montadoraId: 'm_ford' },
+  { id: 'mod_199', nome: 'FIESTA', montadoraId: 'm_ford' },
+  { id: 'mod_200', nome: 'KA', montadoraId: 'm_ford' },
+  { id: 'mod_201', nome: 'COURIER', montadoraId: 'm_ford' },
+  { id: 'mod_202', nome: 'FOCUS', montadoraId: 'm_ford' },
+  { id: 'mod_203', nome: 'MONDEO', montadoraId: 'm_ford' },
+  { id: 'mod_204', nome: 'FUSION', montadoraId: 'm_ford' },
+  { id: 'mod_205', nome: 'TAURUS', montadoraId: 'm_ford' },
+  { id: 'mod_206', nome: 'ECOSPORT', montadoraId: 'm_ford' },
+  { id: 'mod_207', nome: 'EDGE', montadoraId: 'm_ford' },
+  { id: 'mod_208', nome: 'TERRITORY', montadoraId: 'm_ford' },
+  { id: 'mod_209', nome: 'MAVERICK', montadoraId: 'm_ford' },
+  { id: 'mod_210', nome: 'RANGER', montadoraId: 'm_ford' },
+  { id: 'mod_211', nome: 'F-100', montadoraId: 'm_ford' },
+  { id: 'mod_212', nome: 'F-1000', montadoraId: 'm_ford' },
+  { id: 'mod_213', nome: 'F-150', montadoraId: 'm_ford' },
+  { id: 'mod_214', nome: 'F-250', montadoraId: 'm_ford' },
+  { id: 'mod_215', nome: 'F-350', montadoraId: 'm_ford' },
+  { id: 'mod_216', nome: 'F-4000', montadoraId: 'm_ford' },
+  { id: 'mod_217', nome: 'CARGO', montadoraId: 'm_ford' },
+  { id: 'mod_218', nome: 'TRANSIT', montadoraId: 'm_ford' },
+
+  // ============================================================
+  // HONDA
+  // ============================================================
+  { id: 'mod_219', nome: 'ACCORD', montadoraId: 'm_honda' },
+  { id: 'mod_220', nome: 'CIVIC', montadoraId: 'm_honda' },
+  { id: 'mod_221', nome: 'CITY', montadoraId: 'm_honda' },
+  { id: 'mod_222', nome: 'FIT', montadoraId: 'm_honda' },
+  { id: 'mod_224', nome: 'CR-V', montadoraId: 'm_honda' },
+  { id: 'mod_225', nome: 'HR-V', montadoraId: 'm_honda' },
+  { id: 'mod_226', nome: 'WR-V', montadoraId: 'm_honda' },
+  { id: 'mod_227', nome: 'ZR-V', montadoraId: 'm_honda' },
+  { id: 'mod_228', nome: 'CR-Z', montadoraId: 'm_honda' },
+  { id: 'mod_229', nome: 'CIVIC COUPE', montadoraId: 'm_honda' },
+  { id: 'mod_230', nome: 'CIVIC SI', montadoraId: 'm_honda' },
+
+  // ============================================================
+  // HYUNDAI
+  // ============================================================
+  { id: 'mod_235', nome: 'ELANTRA', montadoraId: 'm_hyundai' },
+  { id: 'mod_236', nome: 'SONATA', montadoraId: 'm_hyundai' },
+  { id: 'mod_237', nome: 'AZERA', montadoraId: 'm_hyundai' },
+  { id: 'mod_239', nome: 'VELOSTER', montadoraId: 'm_hyundai' },
+  { id: 'mod_240', nome: 'I30', montadoraId: 'm_hyundai' },
+  { id: 'mod_241', nome: 'I30 CW', montadoraId: 'm_hyundai' },
+  { id: 'mod_242', nome: 'HB20', montadoraId: 'm_hyundai' },
+  { id: 'mod_245', nome: 'CRETA', montadoraId: 'm_hyundai' },
+  { id: 'mod_246', nome: 'TUCSON', montadoraId: 'm_hyundai' },
+  { id: 'mod_247', nome: 'IX35', montadoraId: 'm_hyundai' },
+  { id: 'mod_248', nome: 'SANTA FE', montadoraId: 'm_hyundai' },
+  { id: 'mod_249', nome: 'VERACRUZ', montadoraId: 'm_hyundai' },
+  { id: 'mod_252', nome: 'HR', montadoraId: 'm_hyundai' },
+  { id: 'mod_253', nome: 'H-100', montadoraId: 'm_hyundai' },
+
+  // ============================================================
+  // JAC MOTORS
+  // ============================================================
+  { id: 'mod_254', nome: 'J2', montadoraId: 'm_jac' },
+  { id: 'mod_255', nome: 'J3', montadoraId: 'm_jac' },
+  { id: 'mod_256', nome: 'J3 TURIN', montadoraId: 'm_jac' },
+  { id: 'mod_257', nome: 'J5', montadoraId: 'm_jac' },
+  { id: 'mod_258', nome: 'J6', montadoraId: 'm_jac' },
+  { id: 'mod_259', nome: 'J7', montadoraId: 'm_jac' },
+  { id: 'mod_260', nome: 'T40', montadoraId: 'm_jac' },
+  { id: 'mod_261', nome: 'T50', montadoraId: 'm_jac' },
+  { id: 'mod_262', nome: 'T60', montadoraId: 'm_jac' },
+  { id: 'mod_263', nome: 'T80', montadoraId: 'm_jac' },
+  { id: 'mod_264', nome: 'T8', montadoraId: 'm_jac' },
+  { id: 'mod_265', nome: 'V260', montadoraId: 'm_jac' },
+  { id: 'mod_266', nome: 'V330', montadoraId: 'm_jac' },
+  { id: 'mod_267', nome: 'JAC IEV20', montadoraId: 'm_jac' },
+  { id: 'mod_268', nome: 'JAC IEV40', montadoraId: 'm_jac' },
+  { id: 'mod_269', nome: 'JAC E-JS1', montadoraId: 'm_jac' },
+  { id: 'mod_270', nome: 'JAC E-JS4', montadoraId: 'm_jac' },
+  { id: 'mod_271', nome: 'JAC E-J7', montadoraId: 'm_jac' },
+
+  // ============================================================
+  // JEEP
+  // ============================================================
+  { id: 'mod_275', nome: 'CHEROKEE', montadoraId: 'm_jeep' },
+  { id: 'mod_277', nome: 'WRANGLER', montadoraId: 'm_jeep' },
+  { id: 'mod_278', nome: 'RENEGADE', montadoraId: 'm_jeep' },
+  { id: 'mod_279', nome: 'COMPASS', montadoraId: 'm_jeep' },
+  { id: 'mod_280', nome: 'COMMANDER', montadoraId: 'm_jeep' },
+
+  // ============================================================
+  // KIA
+  // ============================================================
+  { id: 'mod_293', nome: 'BESTA', montadoraId: 'm_kia' },
+  { id: 'mod_294', nome: 'BONGO', montadoraId: 'm_kia' },
+  { id: 'mod_295', nome: 'SPORTAGE', montadoraId: 'm_kia' },
+  { id: 'mod_296', nome: 'CARNIVAL', montadoraId: 'm_kia' },
+  { id: 'mod_297', nome: 'CARENS', montadoraId: 'm_kia' },
+  { id: 'mod_298', nome: 'CERATO', montadoraId: 'm_kia' },
+  { id: 'mod_299', nome: 'PICANTO', montadoraId: 'm_kia' },
+  { id: 'mod_300', nome: 'RIO', montadoraId: 'm_kia' },
+  { id: 'mod_301', nome: 'SOUL', montadoraId: 'm_kia' },
+  { id: 'mod_302', nome: 'SORENTO', montadoraId: 'm_kia' },
+  { id: 'mod_303', nome: 'MOHAVE', montadoraId: 'm_kia' },
+  { id: 'mod_304', nome: 'OPTIMA', montadoraId: 'm_kia' },
+
+  // ============================================================
+  // MERCEDES-BENZ
+  // ============================================================
+  { id: 'mod_309', nome: 'CLASSE A', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_310', nome: 'CLASSE B', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_311', nome: 'CLASSE C', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_312', nome: 'CLASSE E', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_313', nome: 'CLASSE S', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_314', nome: 'CLASSE CLA', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_315', nome: 'CLASSE CLS', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_316', nome: 'CLASSE CLK', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_317', nome: 'CLASSE SLK', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_318', nome: 'CLASSE SL', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_319', nome: 'CLASSE G', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_320', nome: 'CLASSE GLA', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_321', nome: 'CLASSE GLB', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_322', nome: 'CLASSE GLC', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_323', nome: 'CLASSE GLE', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_324', nome: 'CLASSE GLS', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_329', nome: 'VITO', montadoraId: 'm_mercedes_benz' },
+  { id: 'mod_330', nome: 'SPRINTER', montadoraId: 'm_mercedes_benz' },
+
+  // ============================================================
+  // MITSUBISHI
+  // ============================================================
+  { id: 'mod_343', nome: 'L200', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_345', nome: 'PAJERO', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_349', nome: 'PAJERO TR4', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_350', nome: 'OUTLANDER', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_352', nome: 'ASX', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_353', nome: 'ECLIPSE', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_355', nome: '3000GT', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_356', nome: 'GALANT', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_357', nome: 'LANCER', montadoraId: 'm_mitsubishi' },
+  { id: 'mod_359', nome: 'SPACE WAGON', montadoraId: 'm_mitsubishi' },
+
+  // ============================================================
+  // NISSAN
+  // ============================================================
+  { id: 'mod_360', nome: 'SENTRA', montadoraId: 'm_nissan' },
+  { id: 'mod_361', nome: 'ALTIMA', montadoraId: 'm_nissan' },
+  { id: 'mod_362', nome: 'MAXIMA', montadoraId: 'm_nissan' },
+  { id: 'mod_363', nome: 'VERSA', montadoraId: 'm_nissan' },
+  { id: 'mod_364', nome: 'MARCH', montadoraId: 'm_nissan' },
+  { id: 'mod_365', nome: 'LIVINA', montadoraId: 'm_nissan' },
+  { id: 'mod_367', nome: 'KICKS', montadoraId: 'm_nissan' },
+  { id: 'mod_369', nome: 'FRONTIER', montadoraId: 'm_nissan' },
+  { id: 'mod_370', nome: 'XTERRA', montadoraId: 'm_nissan' },
+  { id: 'mod_371', nome: 'PATHFINDER', montadoraId: 'm_nissan' },
+  { id: 'mod_372', nome: '370Z', montadoraId: 'm_nissan' },
+  { id: 'mod_373', nome: '350Z', montadoraId: 'm_nissan' },
+  { id: 'mod_374', nome: 'GT-R', montadoraId: 'm_nissan' },
+  { id: 'mod_375', nome: 'LEAF', montadoraId: 'm_nissan' },
+  { id: 'mod_376', nome: 'TIIDA', montadoraId: 'm_nissan' },
+  { id: 'mod_377', nome: 'TIIDA SEDAN', montadoraId: 'm_nissan' },
+
+  // ============================================================
+  // ORA
+  // ============================================================
+  { id: 'mod_379', nome: 'ORA 03', montadoraId: 'm_ora' },
+  { id: 'mod_380', nome: 'ORA 03 SKIN', montadoraId: 'm_ora' },
+  { id: 'mod_381', nome: 'ORA 03 GT', montadoraId: 'm_ora' },
+
+  // ============================================================
+  // OMODA
+  // ============================================================
+  { id: 'mod_382', nome: 'OMODA 5', montadoraId: 'm_omoda' },
+  { id: 'mod_383', nome: 'OMODA C5', montadoraId: 'm_omoda' },
+  { id: 'mod_384', nome: 'OMODA E5', montadoraId: 'm_omoda' },
+
+  // ============================================================
+  // PEUGEOT
+  // ============================================================
+  { id: 'mod_385', nome: '106', montadoraId: 'm_peugeot' },
+  { id: 'mod_386', nome: '205', montadoraId: 'm_peugeot' },
+  { id: 'mod_387', nome: '206', montadoraId: 'm_peugeot' },
+  { id: 'mod_388', nome: '207', montadoraId: 'm_peugeot' },
+  { id: 'mod_389', nome: '208', montadoraId: 'm_peugeot' },
+  { id: 'mod_390', nome: '306', montadoraId: 'm_peugeot' },
+  { id: 'mod_391', nome: '307', montadoraId: 'm_peugeot' },
+  { id: 'mod_392', nome: '308', montadoraId: 'm_peugeot' },
+  { id: 'mod_393', nome: '408', montadoraId: 'm_peugeot' },
+  { id: 'mod_394', nome: '407', montadoraId: 'm_peugeot' },
+  { id: 'mod_395', nome: '508', montadoraId: 'm_peugeot' },
+  { id: 'mod_396', nome: '2008', montadoraId: 'm_peugeot' },
+  { id: 'mod_397', nome: '3008', montadoraId: 'm_peugeot' },
+  { id: 'mod_398', nome: '5008', montadoraId: 'm_peugeot' },
+  { id: 'mod_399', nome: 'PARTNER', montadoraId: 'm_peugeot' },
+  { id: 'mod_400', nome: 'HOGGAR', montadoraId: 'm_peugeot' },
+  { id: 'mod_401', nome: 'EXPERT', montadoraId: 'm_peugeot' },
+  { id: 'mod_402', nome: 'BOXER', montadoraId: 'm_peugeot' },
+  { id: 'mod_403', nome: 'RCZ', montadoraId: 'm_peugeot' },
+
+  // ============================================================
+  // RAM
+  // ============================================================
+  { id: 'mod_404', nome: 'RAM 1500', montadoraId: 'm_ram' },
+  { id: 'mod_405', nome: 'RAM 1500 CLASSIC', montadoraId: 'm_ram' },
+  { id: 'mod_406', nome: 'RAM 1500 REBEL', montadoraId: 'm_ram' },
+  { id: 'mod_407', nome: 'RAM 1500 LIMITED', montadoraId: 'm_ram' },
+  { id: 'mod_408', nome: 'RAM 2500', montadoraId: 'm_ram' },
+  { id: 'mod_409', nome: 'RAM 3500', montadoraId: 'm_ram' },
+  { id: 'mod_410', nome: 'RAM RAMPAGE', montadoraId: 'm_ram' },
+  { id: 'mod_411', nome: 'RAM 4500', montadoraId: 'm_ram' },
+  { id: 'mod_412', nome: 'RAM 5500', montadoraId: 'm_ram' },
+
+  // ============================================================
+  // RENAULT
+  // ============================================================
+  { id: 'mod_413', nome: 'R9', montadoraId: 'm_renault' },
+  { id: 'mod_414', nome: 'R11', montadoraId: 'm_renault' },
+  { id: 'mod_415', nome: 'R19', montadoraId: 'm_renault' },
+  { id: 'mod_416', nome: 'CLIO', montadoraId: 'm_renault' },
+  { id: 'mod_417', nome: 'CLIO SEDAN', montadoraId: 'm_renault' },
+  { id: 'mod_418', nome: 'MEGANE', montadoraId: 'm_renault' },
+  { id: 'mod_420', nome: 'SCENIC', montadoraId: 'm_renault' },
+  { id: 'mod_421', nome: 'LAGUNA', montadoraId: 'm_renault' },
+  { id: 'mod_422', nome: 'FLUENCE', montadoraId: 'm_renault' },
+  { id: 'mod_423', nome: 'LOGAN', montadoraId: 'm_renault' },
+  { id: 'mod_424', nome: 'SANDERO', montadoraId: 'm_renault' },
+  { id: 'mod_426', nome: 'DUSTER', montadoraId: 'm_renault' },
+  { id: 'mod_428', nome: 'CAPTUR', montadoraId: 'm_renault' },
+  { id: 'mod_429', nome: 'KWID', montadoraId: 'm_renault' },
+  { id: 'mod_430', nome: 'MASTER', montadoraId: 'm_renault' },
+  { id: 'mod_431', nome: 'KANGOO', montadoraId: 'm_renault' },
+  { id: 'mod_432', nome: 'OROCH', montadoraId: 'm_renault' },
+
+  // ============================================================
+  // SSANGYONG
+  // ============================================================
+  { id: 'mod_433', nome: 'MUSSO', montadoraId: 'm_ssangyong' },
+  { id: 'mod_434', nome: 'KORANDO', montadoraId: 'm_ssangyong' },
+  { id: 'mod_435', nome: 'REXTON', montadoraId: 'm_ssangyong' },
+  { id: 'mod_436', nome: 'ACTYON', montadoraId: 'm_ssangyong' },
+  { id: 'mod_437', nome: 'ACTYON SPORTS', montadoraId: 'm_ssangyong' },
+  { id: 'mod_438', nome: 'KYRON', montadoraId: 'm_ssangyong' },
+  { id: 'mod_439', nome: 'RODIUS', montadoraId: 'm_ssangyong' },
+  { id: 'mod_440', nome: 'TIVOLI', montadoraId: 'm_ssangyong' },
+  { id: 'mod_441', nome: 'XLV', montadoraId: 'm_ssangyong' },
+  { id: 'mod_442', nome: 'CHAIRMAN', montadoraId: 'm_ssangyong' },
+
+  // ============================================================
+  // SUZUKI
+  // ============================================================
+  { id: 'mod_444', nome: 'VITARA', montadoraId: 'm_suzuki' },
+  { id: 'mod_446', nome: 'JIMNY', montadoraId: 'm_suzuki' },
+  { id: 'mod_448', nome: 'SX4', montadoraId: 'm_suzuki' },
+  { id: 'mod_449', nome: 'S-CROSS', montadoraId: 'm_suzuki' },
+  { id: 'mod_450', nome: 'SWIFT', montadoraId: 'm_suzuki' },
+
+  // ============================================================
+  // TOYOTA
+  // ============================================================
+  { id: 'mod_455', nome: 'BANDEIRANTE', montadoraId: 'm_toyota' },
+  { id: 'mod_456', nome: 'COROLLA', montadoraId: 'm_toyota' },
+  { id: 'mod_457', nome: 'COROLLA FIELDER', montadoraId: 'm_toyota' },
+  { id: 'mod_458', nome: 'COROLLA CROSS', montadoraId: 'm_toyota' },
+  { id: 'mod_459', nome: 'CAMRY', montadoraId: 'm_toyota' },
+  { id: 'mod_460', nome: 'CELICA', montadoraId: 'm_toyota' },
+  { id: 'mod_461', nome: 'SUPRA', montadoraId: 'm_toyota' },
+  { id: 'mod_463', nome: 'ETIOS', montadoraId: 'm_toyota' },
+  { id: 'mod_464', nome: 'ETIOS SEDAN', montadoraId: 'm_toyota' },
+  { id: 'mod_465', nome: 'YARIS', montadoraId: 'm_toyota' },
+  { id: 'mod_466', nome: 'YARIS SEDAN', montadoraId: 'm_toyota' },
+  { id: 'mod_467', nome: 'PRIUS', montadoraId: 'm_toyota' },
+  { id: 'mod_468', nome: 'RAV4', montadoraId: 'm_toyota' },
+  { id: 'mod_469', nome: 'HILUX', montadoraId: 'm_toyota' },
+  { id: 'mod_470', nome: 'SW4', montadoraId: 'm_toyota' },
+
+  // ============================================================
+  // TROLLER
+  // ============================================================
+  { id: 'mod_475', nome: 'T4', montadoraId: 'm_troller' },
+  { id: 'mod_476', nome: 'T4 BOLD', montadoraId: 'm_troller' },
+  { id: 'mod_477', nome: 'PANTANAL', montadoraId: 'm_troller' },
+  { id: 'mod_478', nome: 'RF SPORT', montadoraId: 'm_troller' },
+
+  // ============================================================
+  // VOLKSWAGEN
+  // ============================================================
+  { id: 'mod_479', nome: 'FUSCA', montadoraId: 'm_volkswagen' },
+  { id: 'mod_480', nome: 'BRASÍLIA', montadoraId: 'm_volkswagen' },
+  { id: 'mod_481', nome: 'KOMBI', montadoraId: 'm_volkswagen' },
+  { id: 'mod_482', nome: 'GOL', montadoraId: 'm_volkswagen' },
+  { id: 'mod_483', nome: 'PARATI', montadoraId: 'm_volkswagen' },
+  { id: 'mod_484', nome: 'SAVEIRO', montadoraId: 'm_volkswagen' },
+  { id: 'mod_485', nome: 'VOYAGE', montadoraId: 'm_volkswagen' },
+  { id: 'mod_486', nome: 'SANTANA', montadoraId: 'm_volkswagen' },
+  { id: 'mod_487', nome: 'QUANTUM', montadoraId: 'm_volkswagen' },
+  { id: 'mod_488', nome: 'APOLLO', montadoraId: 'm_volkswagen' },
+  { id: 'mod_489', nome: 'LOGUS', montadoraId: 'm_volkswagen' },
+  { id: 'mod_490', nome: 'POINTER', montadoraId: 'm_volkswagen' },
+  { id: 'mod_491', nome: 'PASSAT', montadoraId: 'm_volkswagen' },
+  { id: 'mod_492', nome: 'BORA', montadoraId: 'm_volkswagen' },
+  { id: 'mod_493', nome: 'GOLF', montadoraId: 'm_volkswagen' },
+  { id: 'mod_494', nome: 'FOX', montadoraId: 'm_volkswagen' },
+  { id: 'mod_495', nome: 'CROSSFOX', montadoraId: 'm_volkswagen' },
+  { id: 'mod_496', nome: 'SPACEFOX', montadoraId: 'm_volkswagen' },
+  { id: 'mod_497', nome: 'POLO', montadoraId: 'm_volkswagen' },
+  { id: 'mod_498', nome: 'POLO SEDAN', montadoraId: 'm_volkswagen' },
+  { id: 'mod_499', nome: 'JETTA', montadoraId: 'm_volkswagen' },
+  { id: 'mod_500', nome: 'VIRTUS', montadoraId: 'm_volkswagen' },
+  { id: 'mod_501', nome: 'UP!', montadoraId: 'm_volkswagen' },
+  { id: 'mod_502', nome: 'NIVUS', montadoraId: 'm_volkswagen' },
+  { id: 'mod_503', nome: 'T-CROSS', montadoraId: 'm_volkswagen' },
+  { id: 'mod_504', nome: 'TAOS', montadoraId: 'm_volkswagen' },
+  { id: 'mod_505', nome: 'TIGUAN', montadoraId: 'm_volkswagen' },
+  { id: 'mod_506', nome: 'TOUAREG', montadoraId: 'm_volkswagen' },
+  { id: 'mod_508', nome: 'AMAROK', montadoraId: 'm_volkswagen' },
+  { id: 'mod_512', nome: '12.170', montadoraId: 'm_volkswagen' },
+  { id: 'mod_513', nome: '13.180', montadoraId: 'm_volkswagen' },
+  { id: 'mod_514', nome: '15.180', montadoraId: 'm_volkswagen' },
+  { id: 'mod_515', nome: '17.210', montadoraId: 'm_volkswagen' },
+  { id: 'mod_516', nome: '17.250', montadoraId: 'm_volkswagen' },
+
+  // ============================================================
+  // VOLVO
+  // ============================================================
+  { id: 'mod_517', nome: 'C30', montadoraId: 'm_volvo' },
+  { id: 'mod_518', nome: 'C40', montadoraId: 'm_volvo' },
+  { id: 'mod_519', nome: 'S40', montadoraId: 'm_volvo' },
+  { id: 'mod_520', nome: 'S60', montadoraId: 'm_volvo' },
+  { id: 'mod_521', nome: 'S80', montadoraId: 'm_volvo' },
+  { id: 'mod_522', nome: 'S90', montadoraId: 'm_volvo' },
+  { id: 'mod_523', nome: 'V40', montadoraId: 'm_volvo' },
+  { id: 'mod_524', nome: 'V50', montadoraId: 'm_volvo' },
+  { id: 'mod_525', nome: 'V60', montadoraId: 'm_volvo' },
+  { id: 'mod_526', nome: 'V70', montadoraId: 'm_volvo' },
+  { id: 'mod_527', nome: 'XC40', montadoraId: 'm_volvo' },
+  { id: 'mod_528', nome: 'XC60', montadoraId: 'm_volvo' },
+  { id: 'mod_529', nome: 'XC70', montadoraId: 'm_volvo' },
+  { id: 'mod_530', nome: 'XC90', montadoraId: 'm_volvo' },
+  { id: 'mod_531', nome: 'EX30', montadoraId: 'm_volvo' },
+  { id: 'mod_532', nome: 'EX40', montadoraId: 'm_volvo' },
+  { id: 'mod_533', nome: 'EX90', montadoraId: 'm_volvo' },
+  
+  // ============================================================
+  // MOTOCICLETAS
+  // ============================================================
+
+  { id: 'mod_341', nome: 'BOXER 100', montadoraId: 'm_bajaj' },
+  { id: 'mod_342', nome: 'DOMINAR 250', montadoraId: 'm_bajaj' },
+  { id: 'mod_343', nome: 'DOMINAR 400', montadoraId: 'm_bajaj' },
+  { id: 'mod_344', nome: 'PULSAR 200 NS', montadoraId: 'm_bajaj' },
+
+  { id: 'mod_345', nome: 'APACHE RTR 150', montadoraId: 'm_dafra' },
+  { id: 'mod_346', nome: 'CITYCOM 300I', montadoraId: 'm_dafra' },
+  { id: 'mod_347', nome: 'KANSAS 150', montadoraId: 'm_dafra' },
+  { id: 'mod_348', nome: 'NEXT 250', montadoraId: 'm_dafra' },
+  { id: 'mod_349', nome: 'NH 190', montadoraId: 'm_dafra' },
+  { id: 'mod_350', nome: 'ZIG 50', montadoraId: 'm_dafra' },
+
+  { id: 'mod_351', nome: 'NINJA 300', montadoraId: 'm_kawasaki' },
+  { id: 'mod_352', nome: 'NINJA 400', montadoraId: 'm_kawasaki' },
+  { id: 'mod_353', nome: 'NINJA 650', montadoraId: 'm_kawasaki' },
+  { id: 'mod_354', nome: 'NINJA ZX-6R', montadoraId: 'm_kawasaki' },
+  { id: 'mod_355', nome: 'NINJA ZX-10R', montadoraId: 'm_kawasaki' },
+  { id: 'mod_356', nome: 'VERSYS 300', montadoraId: 'm_kawasaki' },
+  { id: 'mod_357', nome: 'VERSYS 650', montadoraId: 'm_kawasaki' },
+  { id: 'mod_358', nome: 'Z300', montadoraId: 'm_kawasaki' },
+  { id: 'mod_359', nome: 'Z400', montadoraId: 'm_kawasaki' },
+  { id: 'mod_360', nome: 'Z650', montadoraId: 'm_kawasaki' },
+
+  { id: 'mod_361', nome: '200 DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_362', nome: '390 DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_363', nome: '690 DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_364', nome: '790 DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_365', nome: '890 DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_366', nome: '1290 SUPER DUKE', montadoraId: 'm_ktm' },
+  { id: 'mod_367', nome: '390 ADVENTURE', montadoraId: 'm_ktm' },
+
+  { id: 'mod_368', nome: 'CLASSIC 350', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_369', nome: 'HUNTER 350', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_370', nome: 'METEOR 350', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_371', nome: 'BULLET 350', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_372', nome: 'INTERCEPTOR 650', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_373', nome: 'CONTINENTAL GT 650', montadoraId: 'm_royal_enfield' },
+  { id: 'mod_374', nome: 'HIMALAYAN', montadoraId: 'm_royal_enfield' },
+
+  { id: 'mod_375', nome: 'JET 50', montadoraId: 'm_shineray_motos' },
+  { id: 'mod_376', nome: 'PHOENIX 50', montadoraId: 'm_shineray_motos' },
+  { id: 'mod_377', nome: 'SHI 175', montadoraId: 'm_shineray_motos' },
+  { id: 'mod_378', nome: 'XY 50', montadoraId: 'm_shineray_motos' },
+
+  { id: 'mod_379', nome: 'YES 125', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_380', nome: 'INTRUDER 125', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_381', nome: 'BURGMAN 125', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_382', nome: 'GSX-R 750', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_383', nome: 'GSX-R 1000', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_384', nome: 'V-STROM 650', montadoraId: 'm_suzuki_motos' },
+  { id: 'mod_385', nome: 'V-STROM 1000', montadoraId: 'm_suzuki_motos' },
+
+  { id: 'mod_386', nome: 'SPEED TRIPLE', montadoraId: 'm_triumph' },
+  { id: 'mod_387', nome: 'STREET TRIPLE', montadoraId: 'm_triumph' },
+  { id: 'mod_388', nome: 'TIGER 800', montadoraId: 'm_triumph' },
+  { id: 'mod_389', nome: 'TIGER 900', montadoraId: 'm_triumph' },
+  { id: 'mod_390', nome: 'TIGER 1200', montadoraId: 'm_triumph' },
+  { id: 'mod_391', nome: 'BONNEVILLE T100', montadoraId: 'm_triumph' },
+  { id: 'mod_392', nome: 'BONNEVILLE T120', montadoraId: 'm_triumph' },
+
+  { id: 'mod_393', nome: 'FACTOR 125', montadoraId: 'm_yamaha' },
+  { id: 'mod_394', nome: 'FAZER 150', montadoraId: 'm_yamaha' },
+  { id: 'mod_395', nome: 'FAZER 250', montadoraId: 'm_yamaha' },
+  { id: 'mod_396', nome: 'LANDER 250', montadoraId: 'm_yamaha' },
+  { id: 'mod_397', nome: 'XTZ 125', montadoraId: 'm_yamaha' },
+  { id: 'mod_398', nome: 'XTZ 250', montadoraId: 'm_yamaha' },
+  { id: 'mod_399', nome: 'XT 660', montadoraId: 'm_yamaha' },
+  { id: 'mod_400', nome: 'MT-03', montadoraId: 'm_yamaha' },
+  { id: 'mod_401', nome: 'MT-07', montadoraId: 'm_yamaha' },
+  { id: 'mod_402', nome: 'MT-09', montadoraId: 'm_yamaha' },
+  { id: 'mod_403', nome: 'MT-10', montadoraId: 'm_yamaha' },
+  { id: 'mod_404', nome: 'NMAX 160', montadoraId: 'm_yamaha' },
+  { id: 'mod_405', nome: 'R3', montadoraId: 'm_yamaha' },
+  { id: 'mod_406', nome: 'R1', montadoraId: 'm_yamaha' },
+
+  { id: 'mod_407', nome: 'R310', montadoraId: 'm_bmw' },
+  { id: 'mod_408', nome: 'F700 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_409', nome: 'F750 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_410', nome: 'F800 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_411', nome: 'F850 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_412', nome: 'R1200 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_413', nome: 'R1250 GS', montadoraId: 'm_bmw' },
+  { id: 'mod_414', nome: 'S1000 RR', montadoraId: 'm_bmw' }
     ];
 
     const defaultCores = [
@@ -852,7 +1515,10 @@
       { id: 'c5', nome: 'CINZA' },
       { id: 'c6', nome: 'VERMELHA' },
       { id: 'c7', nome: 'AZUL' },
-      { id: 'c8', nome: 'AMARELA' }
+      { id: 'c8', nome: 'MARROM' },
+      { id: 'c9', nome: 'ROXA' },
+      { id: 'c10', nome: 'AMARELA' },
+      { id: 'c11', nome: 'LARANJA' }
     ];
 
     let montadoras = JSON.parse(localStorage.getItem(STORAGE_KEYS.MONTADORAS)) || defaultMontadoras;
