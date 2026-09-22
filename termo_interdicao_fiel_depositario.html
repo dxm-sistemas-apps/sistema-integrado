@@ -68,13 +68,15 @@
             line-height: 1.45;
             box-sizing: border-box;
             padding: 30px 40px !important;
+            width: 100%;
+            max-width: 800px;
         }
 
         .pdf-document p {
             text-align: justify;
             text-justify: inter-word;
             margin-bottom: 0.8rem;
-            font-size: 12.5px;
+            font-size: 13px;
             color: #000000 !important;
         }
 
@@ -99,9 +101,6 @@
     <!-- Header Navigation -->
     <header class="bg-gray-900 text-white shadow-md">
         <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col items-center justify-center text-center">
-            <div class="bg-blue p-1.5 rounded-lg shadow-sm mb-2">
-                <img id="appLogo" class="h-64 object-contain" alt="Logo DGAD Suporte">
-            </div>
             <div>
                 <h1 class="font-bold text-base md:text-lg leading-tight uppercase">TERMO DE INTERDIÇÃO E FIEL DEPOSITÁRIO</h1>
                 <p class="text-xs text-blue-200 uppercase">SISTEMA INTEGRADO - EQUIPE OPERACIONAL</p>
@@ -113,11 +112,8 @@
         <main class="max-w-5xl mx-auto px-2 sm:px-4">
             
             <div class="space-y-6">
-                <!-- Cabeçalho Oficial -->
+                <!-- Cabeçalho Oficial Formulário -->
                 <header class="text-center border-b-2 border-gray-800 pb-4 mb-6">
-                    <div class="flex justify-center mb-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" crossorigin="anonymous" alt="Brasão do Estado do Rio de Janeiro" class="h-24 w-auto object-contain">
-                    </div>
                     <h1 class="text-lg sm:text-xl font-bold uppercase tracking-wide">Governo do Estado do Rio de Janeiro</h1>
                     <h2 class="text-md sm:text-lg font-semibold uppercase">Departamento de Trânsito do Estado do Rio de Janeiro - DETRAN RJ</h2>
                     <h3 class="text-sm sm:text-md font-medium text-slate-600 uppercase mt-1">Força-Tarefa de Fiscalização e Desmontagem</h3>
@@ -256,15 +252,18 @@
             <div id="previewAnchor" class="mt-10 mb-12">
                 <div class="preview-container bg-slate-200 p-2 sm:p-6 rounded-xl shadow-inner border border-slate-300">
                     
-                    <div id="pdfContent" class="pdf-document mx-auto bg-white shadow-xl border border-slate-300 max-w-4xl">
+                    <div id="pdfContent" class="pdf-document mx-auto bg-white shadow-xl border border-slate-300">
                         
-                        <!-- Cabeçalho -->
-                        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 14px;">
-                            <div style="display: flex; justify-content: center; margin-bottom: 4px;">
-                                <img id="docLogoHeader" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" crossorigin="anonymous" style="height: 65px; object-fit: contain;">
+                        <!-- Cabeçalho Oficial Vetorizado Seguro (Sem bloqueios externos) -->
+                        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
                             </div>
-                            <h2 style="font-size: 14px; font-weight: bold; margin: 0; text-transform: uppercase;">DETRAN.RJ</h2>
-                            <h1 style="font-size: 13.5px; font-weight: bold; margin: 4px 0 0 0; text-transform: uppercase; text-decoration: underline;">
+                            <h2 style="font-size: 15px; font-weight: bold; margin: 0; text-transform: uppercase;">GOVERNO DO ESTADO DO RIO DE JANEIRO</h2>
+                            <h2 style="font-size: 13.5px; font-weight: bold; margin: 2px 0 0 0; text-transform: uppercase;">DETRAN.RJ - DEPARTAMENTO DE TRÂNSITO</h2>
+                            <h1 style="font-size: 13px; font-weight: bold; margin: 6px 0 0 0; text-transform: uppercase; text-decoration: underline;">
                                 TERMO DE INTERDIÇÃO E DESIGNAÇÃO COMO FIEL DEPOSITÁRIO
                             </h1>
                         </div>
@@ -280,10 +279,10 @@
                         </p>
 
                         <!-- Inventário -->
-                        <div style="font-weight: bold; font-size: 12px; margin-top: 6px; margin-bottom: 3px;">
+                        <div style="font-weight: bold; font-size: 12px; margin-top: 8px; margin-bottom: 4px;">
                             1. Descrição das mercadorias:
                         </div>
-                        <div id="docDescricaoMercadorias" style="font-size: 11.5px; line-height: 1.35; min-height: 50px; border: 1px solid #444; padding: 6px; margin-bottom: 8px; text-align: justify;">
+                        <div id="docDescricaoMercadorias" style="font-size: 11.5px; line-height: 1.4; min-height: 60px; border: 1px solid #444; padding: 8px; margin-bottom: 10px; text-align: justify; word-break: break-word; white-space: pre-wrap;">
                             Nenhuma mercadoria informada.
                         </div>
 
@@ -293,10 +292,10 @@
                         </p>
 
                         <!-- Implicações Penais -->
-                        <div style="font-weight: bold; font-size: 12px; margin-top: 6px; margin-bottom: 2px;">
+                        <div style="font-weight: bold; font-size: 12px; margin-top: 8px; margin-bottom: 2px;">
                             IMPLICAÇÕES PENAIS:
                         </div>
-                        <p style="margin-bottom: 6px;">
+                        <p style="margin-bottom: 8px;">
                             1. Legislação Penal: O descumprimento das medidas determinadas neste termo poderá caracterizar crime, sujeitando o infrator à penalidade prevista no artigo Art. 330 do Código Penal Brasileiro. Pena de até 6 (seis) meses de detenção e multa.
                         </p>
 
@@ -309,30 +308,32 @@
                             Local: <span id="docMunicipio">RIO DE JANEIRO</span>, Data: <span id="docDataTermo">__/__/2026</span>.
                         </div>
 
-                        <!-- Assinaturas em 2 Colunas -->
-                        <div style="margin-top: 25px; display: table; width: 100%; table-layout: fixed;">
-                            <div style="display: table-cell; text-align: center; vertical-align: bottom; width: 50%; padding: 0 10px;">
-                                <div style="height: 42px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2px;">
-                                    <img id="imgSignAgente" style="max-height: 42px; max-width: 100%; display: none;">
-                                </div>
-                                <div style="border-top: 1px solid #000; padding-top: 3px;">
-                                    <span id="docAssAgenteNome" style="font-weight: bold; font-size: 11px; text-transform: uppercase; display: block;">AGENTE PÚBLICO</span>
-                                    <span style="font-size: 10px; color: #333; display: block;">Agente Público - DETRAN.RJ</span>
-                                    <span style="font-size: 9px; color: #555; display: block;">Id. Funcional: <span id="docAssAgenteId">________</span></span>
-                                </div>
-                            </div>
-
-                            <div style="display: table-cell; text-align: center; vertical-align: bottom; width: 50%; padding: 0 10px;">
-                                <div style="height: 42px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2px;">
-                                    <img id="imgSignProprietario" style="max-height: 42px; max-width: 100%; display: none;">
-                                </div>
-                                <div style="border-top: 1px solid #000; padding-top: 3px;">
-                                    <span id="docAssPropNome" style="font-weight: bold; font-size: 11px; text-transform: uppercase; display: block;">PROPRIETÁRIO DO ESTABELECIMENTO</span>
-                                    <span style="font-size: 10px; color: #333; display: block;">Proprietário do Estabelecimento</span>
-                                    <span style="font-size: 9px; color: #555; display: block;">CPF: <span id="docAssPropCPF">___.___.___-__</span></span>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Assinaturas em Tabela Estável -->
+                        <table style="width: 100%; border: none; margin-top: 30px; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 48%; text-align: center; vertical-align: bottom; padding: 0 10px;">
+                                    <div style="height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px;">
+                                        <img id="imgSignAgente" style="max-height: 50px; max-width: 100%; visibility: hidden;">
+                                    </div>
+                                    <div style="border-top: 1px solid #000; padding-top: 4px;">
+                                        <span id="docAssAgenteNome" style="font-weight: bold; font-size: 11px; text-transform: uppercase; display: block;">AGENTE PÚBLICO</span>
+                                        <span style="font-size: 10px; color: #222; display: block;">Agente Público - DETRAN.RJ</span>
+                                        <span style="font-size: 9px; color: #444; display: block;">Id. Funcional: <span id="docAssAgenteId">________</span></span>
+                                    </div>
+                                </td>
+                                <td style="width: 4%;"></td>
+                                <td style="width: 48%; text-align: center; vertical-align: bottom; padding: 0 10px;">
+                                    <div style="height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px;">
+                                        <img id="imgSignProprietario" style="max-height: 50px; max-width: 100%; visibility: hidden;">
+                                    </div>
+                                    <div style="border-top: 1px solid #000; padding-top: 4px;">
+                                        <span id="docAssPropNome" style="font-weight: bold; font-size: 11px; text-transform: uppercase; display: block;">PROPRIETÁRIO DO ESTABELECIMENTO</span>
+                                        <span style="font-size: 10px; color: #222; display: block;">Proprietário do Estabelecimento</span>
+                                        <span style="font-size: 9px; color: #444; display: block;">CPF: <span id="docAssPropCPF">___.___.___-__</span></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -380,15 +381,11 @@
 
     <script>
         lucide.createIcons();
-        const LOGO_DGAD_SUPORTE = "FIEL DEPOSITÁRIO SEM FUNDO.png";
         const STORAGE_KEY = 'detran_termo_interdicao_v1';
         let currentTargetRole = '';
         let signatures = { Agente: '', Proprietario: '' };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const logoEl = document.getElementById('appLogo');
-            if (logoEl) logoEl.src = LOGO_DGAD_SUPORTE;
-
             loadSavedData();
             updatePreview();
             renderizarGridPDFs();
@@ -427,10 +424,10 @@
                 if (docImg) {
                     if (signatures[r]) {
                         docImg.src = signatures[r];
-                        docImg.style.display = 'block';
+                        docImg.style.visibility = 'visible';
                     } else {
-                        docImg.src = '';
-                        docImg.style.display = 'none';
+                        docImg.removeAttribute('src');
+                        docImg.style.visibility = 'hidden';
                     }
                 }
             });
@@ -540,7 +537,7 @@
             if (prev) { prev.src = dataURL; prev.classList.remove('hidden'); }
             if (pl) pl.classList.add('hidden');
             const docImg = document.getElementById(`imgSign${role}`);
-            if (docImg) { docImg.src = dataURL; docImg.style.display = 'block'; }
+            if (docImg) { docImg.src = dataURL; docImg.style.visibility = 'visible'; }
         }
 
         function scrollToPreview() { document.getElementById('previewAnchor').scrollIntoView({ behavior: 'smooth' }); }
@@ -601,39 +598,31 @@
                 didOpen: () => Swal.showLoading()
             });
 
-            // Clona o elemento para isolar a renderização do scroll da página e garantir visibilidade completa
-            const clone = element.cloneNode(true);
-            clone.style.width = '750px';
-            clone.style.minWidth = '750px';
-            clone.style.position = 'fixed';
-            clone.style.left = '-9999px';
-            clone.style.top = '0';
-            clone.style.zIndex = '-9999';
-            document.body.appendChild(clone);
-
             const opt = {
                 margin: [10, 10, 10, 10],
                 filename: nomeArquivo,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
-                    scale: 2, 
-                    useCORS: true,
-                    allowTaint: true,
-                    scrollX: 0,
-                    scrollY: 0,
+                    scale: 2,
+                    useCORS: false,
+                    logging: false,
                     backgroundColor: '#ffffff'
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             try {
-                const blob = await html2pdf().set(opt).from(clone).outputPdf('blob');
-                document.body.removeChild(clone);
+                // Rola para a prévia para assegurar coordenadas visíveis
+                window.scrollTo(0, element.offsetTop - 20);
 
+                const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url; a.download = nomeArquivo;
-                document.body.appendChild(a); a.click(); a.remove();
+                a.href = url;
+                a.download = nomeArquivo;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
                 setTimeout(() => URL.revokeObjectURL(url), 1000);
 
                 const reader = new FileReader();
@@ -652,9 +641,6 @@
 
                 Swal.fire('SUCESSO', 'TERMO DE INTERDIÇÃO GERADO COM SUCESSO!', 'success');
             } catch (err) {
-                if (document.body.contains(clone)) {
-                    document.body.removeChild(clone);
-                }
                 console.error(err);
                 Swal.fire('ERRO', 'FALHA AO GERAR O PDF.', 'error');
             }
