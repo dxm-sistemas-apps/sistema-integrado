@@ -96,7 +96,7 @@
 </head>
 <body class="text-slate-800 antialiased pb-12 relative">
 
-    <!-- Header Navigation (Padrão suporte.html) -->
+    <!-- Header Navigation -->
     <header class="bg-gray-900 text-white shadow-md">
         <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col items-center justify-center text-center">
             <div class="bg-blue p-1.5 rounded-lg shadow-sm mb-2">
@@ -116,7 +116,7 @@
                 <!-- Cabeçalho Oficial -->
                 <header class="text-center border-b-2 border-gray-800 pb-4 mb-6">
                     <div class="flex justify-center mb-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" alt="Brasão do Estado do Rio de Janeiro" class="h-24 w-auto object-contain">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" crossorigin="anonymous" alt="Brasão do Estado do Rio de Janeiro" class="h-24 w-auto object-contain">
                     </div>
                     <h1 class="text-lg sm:text-xl font-bold uppercase tracking-wide">Governo do Estado do Rio de Janeiro</h1>
                     <h2 class="text-md sm:text-lg font-semibold uppercase">Departamento de Trânsito do Estado do Rio de Janeiro - DETRAN RJ</h2>
@@ -261,7 +261,7 @@
                         <!-- Cabeçalho -->
                         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 14px;">
                             <div style="display: flex; justify-content: center; margin-bottom: 4px;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" style="height: 65px; object-fit: contain;">
+                                <img id="docLogoHeader" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png/500px-Ins%C3%ADgnia_bras%C3%A3o_estilizado_governos_Wilson_Witzel_e_Cl%C3%A1udio_Castro_RJ.png" crossorigin="anonymous" style="height: 65px; object-fit: contain;">
                             </div>
                             <h2 style="font-size: 14px; font-weight: bold; margin: 0; text-transform: uppercase;">DETRAN.RJ</h2>
                             <h1 style="font-size: 13.5px; font-weight: bold; margin: 4px 0 0 0; text-transform: uppercase; text-decoration: underline;">
@@ -601,16 +601,35 @@
                 didOpen: () => Swal.showLoading()
             });
 
+            // Clona o elemento para isolar a renderização do scroll da página e garantir visibilidade completa
+            const clone = element.cloneNode(true);
+            clone.style.width = '750px';
+            clone.style.minWidth = '750px';
+            clone.style.position = 'fixed';
+            clone.style.left = '-9999px';
+            clone.style.top = '0';
+            clone.style.zIndex = '-9999';
+            document.body.appendChild(clone);
+
             const opt = {
-                margin: [5, 5, 5, 5],
+                margin: [10, 10, 10, 10],
                 filename: nomeArquivo,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    backgroundColor: '#ffffff'
+                },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             try {
-                const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+                const blob = await html2pdf().set(opt).from(clone).outputPdf('blob');
+                document.body.removeChild(clone);
+
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url; a.download = nomeArquivo;
@@ -633,6 +652,9 @@
 
                 Swal.fire('SUCESSO', 'TERMO DE INTERDIÇÃO GERADO COM SUCESSO!', 'success');
             } catch (err) {
+                if (document.body.contains(clone)) {
+                    document.body.removeChild(clone);
+                }
                 console.error(err);
                 Swal.fire('ERRO', 'FALHA AO GERAR O PDF.', 'error');
             }
