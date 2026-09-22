@@ -533,7 +533,7 @@
 
     <script>
         lucide.createIcons();
-        const LOGO_DGAD_SUPORTE = "APREENSÃO SEM FUNDO.png";
+        const LOGO_DGAD_SUPORTE = "apreensão sem fundo.png";
         const STORAGE_KEY = 'detran_apreensao_sucata_v1';
         let itens = [{ qtd: '10 UNID', desc: 'MOTORES DIVERSOS SEM NUMERAÇÃO APARENTE' }];
         let currentTargetRole = '';
@@ -808,7 +808,17 @@
                 margin: [5, 5, 5, 5],
                 filename: nomeArquivo,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: element.scrollWidth,
+                    windowHeight: element.scrollHeight,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
