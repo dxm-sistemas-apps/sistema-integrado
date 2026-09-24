@@ -589,14 +589,27 @@
     <div class="card">
       <div class="form-group">
         <label for="header-atividade">NATUREZA DA FISCALIZAÇÃO: *</label>
-        <input type="text" id="header-atividade" placeholder="FORÇA TAREFA / DENÚNCIA / OPERAÇÃO CARGA" oninput="this.value = this.value.toUpperCase()">
+        <select id="header-atividade" onchange="atualizarCamposNatureza()">
+          <option value="" selected>ESCOLHA UMA OPÇÃO</option>
+          <option value="FISCALIZAÇÃO DE EMPRESA CREDENCIADA">FISCALIZAÇÃO DE EMPRESA CREDENCIADA</option>
+          <option value="FISCALIZAÇÃO DE APURAÇÃO DE DENÚNCIA">FISCALIZAÇÃO DE APURAÇÃO DE DENÚNCIA</option>
+          <option value="FISCALIZAÇÃO DE FORÇA TAREFA">FISCALIZAÇÃO DE FORÇA TAREFA</option>
+        </select>
+      </div>
+      <div class="form-group" id="grupo-fase-forca-tarefa" style="display: none;">
+        <label for="header-fase-forca-tarefa">FASE DA FORÇA TAREFA: *</label>
+        <input type="number" id="header-fase-forca-tarefa" placeholder="FASE DA FORÇA TAREFA" class="uppercase">
+      </div>
+      <div class="form-group" id="grupo-estabelecimento" style="display: none;">
+        <label for="header-estabelecimento">ESTABELECIMENTO: *</label>
+        <input type="text" id="header-estabelecimento" placeholder="RAZÃO SOCIAL / NOME FANTASIA" oninput="this.value = this.value.toUpperCase()">
+      </div>
+      <div class="form-group" id="grupo-endereco" style="display: none;">
+        <label for="header-local">ENDEREÇO: *</label>
+        <input type="text" id="header-local" placeholder="ENDEREÇO COMPLETO" oninput="this.value = this.value.toUpperCase()">
       </div>
       <div class="form-group">
-        <label for="header-local">LOCAL: *</label>
-        <input type="text" id="header-local" placeholder="ENDEREÇO COMPLETO OU NOME DA EMPRESA" oninput="this.value = this.value.toUpperCase()">
-      </div>
-      <div class="form-group">
-        <label for="header-data">DATA DA OPERAÇÃO / CARGA: *</label>
+        <label for="header-data">DATA: *</label>
         <input type="date" id="header-data" onchange="validarEstadoBotoesData()">
       </div>
     </div>
@@ -735,7 +748,7 @@
   </div>
 
   <script>
-    const LOGO_DGAD_SUPORTE = "CARGA SEM FUNDO.png";
+    const LOGO_DGAD_SUPORTE = "carga sem fundo.png";
 
     const STORAGE_KEYS = {
       HEADER: 'detran_header_data_carga',
@@ -750,6 +763,10 @@
     const DB_NAME = 'DetranControleCargaDB';
     const DB_VERSION = 1;
     const STORE_PDFS = 'historico_pdfs';
+
+    function normalizarTexto(texto) {
+      return (texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+    }
 
     function openIndexedDB() {
       return new Promise((resolve, reject) => {
@@ -886,29 +903,72 @@
       renderRelatoriosParciais();
       await renderizarGridPDFs();
       validarEstadoBotoesData();
+      atualizarCamposNatureza();
 
-      const headerInputs = ['header-atividade', 'header-local', 'header-data'];
+      const headerInputs = ['header-atividade', 'header-fase-forca-tarefa', 'header-estabelecimento', 'header-local', 'header-data'];
       headerInputs.forEach(id => {
         const el = document.getElementById(id);
-        el.addEventListener('input', (e) => {
-          if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
-          saveHeaderData();
-          validarEstadoBotoesData();
-        });
+        if (el) {
+          el.addEventListener('input', (e) => {
+            if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
+            saveHeaderData();
+            validarEstadoBotoesData();
+          });
+          el.addEventListener('change', () => {
+            saveHeaderData();
+            validarEstadoBotoesData();
+          });
+        }
       });
 
       const formInputs = ['reg-recicladora', 'reg-veiculo', 'reg-placa', 'reg-chegada', 'reg-inicio', 'reg-termino'];
       formInputs.forEach(id => {
         const el = document.getElementById(id);
-        el.addEventListener('input', (e) => {
-          if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
-          if (!editingItemId) saveFormDraft();
-        });
-        el.addEventListener('change', () => {
-          if (!editingItemId) saveFormDraft();
-        });
+        if (el) {
+          el.addEventListener('input', (e) => {
+            if (e.target.type === 'text') e.target.value = e.target.value.toUpperCase();
+            if (!editingItemId) saveFormDraft();
+          });
+          el.addEventListener('change', () => {
+            if (!editingItemId) saveFormDraft();
+          });
+        }
       });
     });
+
+    function atualizarCamposNatureza() {
+      const natureza = document.getElementById('header-atividade').value;
+      const grupoFase = document.getElementById('grupo-fase-forca-tarefa');
+      const grupoEstab = document.getElementById('grupo-estabelecimento');
+      const grupoEndereco = document.getElementById('grupo-endereco');
+
+      if (!natureza) {
+          grupoFase.style.display = 'none';
+          grupoEstab.style.display = 'none';
+          grupoEndereco.style.display = 'none';
+          return;
+      }
+
+      const semFaseNemEndereco = [
+          'FISCALIZAÇÃO DE EMPRESA CREDENCIADA',
+          'FISCALIZAÇÃO DE PRIMEIRO CREDENCIAMENTO',
+          'FISCALIZAÇÃO DE RENOVAÇÃO DE CREDENCIAMENTO'
+      ].includes(natureza);
+      const semFase = natureza === 'FISCALIZAÇÃO DE APURAÇÃO DE DENÚNCIA';
+
+      grupoEstab.style.display = '';
+
+      if (semFaseNemEndereco) {
+          grupoFase.style.display = 'none';
+          grupoEndereco.style.display = 'none';
+      } else if (semFase) {
+          grupoFase.style.display = 'none';
+          grupoEndereco.style.display = '';
+      } else {
+          grupoFase.style.display = '';
+          grupoEndereco.style.display = '';
+      }
+    }
 
     function validarEstadoBotoesData() {
       const dataInput = document.getElementById('header-data');
@@ -1012,6 +1072,8 @@
     function saveHeaderData() {
       const data = {
         atividade: document.getElementById('header-atividade').value.toUpperCase(),
+        fase: document.getElementById('header-fase-forca-tarefa').value.toUpperCase(),
+        estabelecimento: document.getElementById('header-estabelecimento').value.toUpperCase(),
         local: document.getElementById('header-local').value.toUpperCase(),
         data: document.getElementById('header-data').value
       };
@@ -1026,6 +1088,8 @@
         try {
           const data = JSON.parse(saved);
           document.getElementById('header-atividade').value = (data.atividade || '').toUpperCase();
+          document.getElementById('header-fase-forca-tarefa').value = (data.fase || '').toUpperCase();
+          document.getElementById('header-estabelecimento').value = (data.estabelecimento || '').toUpperCase();
           document.getElementById('header-local').value = (data.local || '').toUpperCase();
           document.getElementById('header-data').value = data.data || '';
         } catch (_) {}
@@ -1204,6 +1268,8 @@
 
     function salvarRegistro() {
       const elAtividade = document.getElementById('header-atividade');
+      const elFase = document.getElementById('header-fase-forca-tarefa');
+      const elEstabelecimento = document.getElementById('header-estabelecimento');
       const elLocal = document.getElementById('header-local');
       const elData = document.getElementById('header-data');
       const elRecicladora = document.getElementById('reg-recicladora');
@@ -1214,6 +1280,8 @@
       const elTermino = document.getElementById('reg-termino');
 
       const atividade = elAtividade.value.trim();
+      const fase = elFase.value.trim();
+      const estabelecimento = elEstabelecimento.value.trim();
       const local = elLocal.value.trim();
       const dataHeader = elData.value;
       const recId = elRecicladora.value;
@@ -1223,9 +1291,14 @@
       const inicio = elInicio.value;
       const termino = elTermino.value;
 
+      const exibeFase = document.getElementById('grupo-fase-forca-tarefa').style.display !== 'none';
+      const exibeEndereco = document.getElementById('grupo-endereco').style.display !== 'none';
+
       if (!dataHeader) { mostrarAlertaAviso('DATA OBRIGATÓRIA', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> INFORME A <span style="color:#dc2626; font-weight:bold;">"DATA DA OPERAÇÃO / CARGA"</span> ANTES DE CONTINUAR!', elData); return; }
-      if (!atividade) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return; }
-      if (!local) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"LOCAL"</span>!', elLocal); return; }
+      if (!atividade) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return; }
+      if (exibeFase && !fase) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"FASE DA FORÇA TAREFA"</span>!', elFase); return; }
+      if (!estabelecimento) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"ESTABELECIMENTO"</span>!', elEstabelecimento); return; }
+      if (exibeEndereco && !local) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"ENDEREÇO"</span>!', elLocal); return; }
       if (!recId) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"RECICLADORA"</span>!', elRecicladora); return; }
       if (!veicId) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE O <span style="color:#dc2626; font-weight:bold;">"TIPO DE VEÍCULO"</span>!', elVeiculo); return; }
       if (!placa) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> INFORME A <span style="color:#dc2626; font-weight:bold;">"PLACA DO VEÍCULO"</span>!', elPlaca); return; }
@@ -1554,9 +1627,12 @@
           localStorage.removeItem(STORAGE_KEYS.PARCIAIS);
           
           document.getElementById('header-atividade').value = '';
+          document.getElementById('header-fase-forca-tarefa').value = '';
+          document.getElementById('header-estabelecimento').value = '';
           document.getElementById('header-local').value = '';
           document.getElementById('header-data').value = '';
           
+          atualizarCamposNatureza();
           saveHeaderData();
           resetFormState();
           loadFormDraft();
@@ -1571,11 +1647,17 @@
 
     function validarGeracaoPDF() {
       const elAtividade = document.getElementById('header-atividade');
+      const elFase = document.getElementById('header-fase-forca-tarefa');
+      const elEstabelecimento = document.getElementById('header-estabelecimento');
       const elLocal = document.getElementById('header-local');
+      const exibeFase = document.getElementById('grupo-fase-forca-tarefa').style.display !== 'none';
+      const exibeEndereco = document.getElementById('grupo-endereco').style.display !== 'none';
       const { datasOrdenadas } = obterTodasAsCargasOrdenadas();
 
-      if (!elAtividade.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return false; }
-      if (!elLocal.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"LOCAL"</span>!', elLocal); return false; }
+      if (!elAtividade.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> SELECIONE A <span style="color:#dc2626; font-weight:bold;">"NATUREZA DA FISCALIZAÇÃO"</span>!', elAtividade); return false; }
+      if (exibeFase && !elFase.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA A <span style="color:#dc2626; font-weight:bold;">"FASE DA FORÇA TAREFA"</span>!', elFase); return false; }
+      if (!elEstabelecimento.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"ESTABELECIMENTO"</span>!', elEstabelecimento); return false; }
+      if (exibeEndereco && !elLocal.value.trim()) { mostrarAlertaAviso('CAMPO OBRIGATÓRIO', '<span style="color:#f59e0b; font-weight:bold;">ATENÇÃO:</span> PREENCHA O <span style="color:#dc2626; font-weight:bold;">"ENDEREÇO"</span>!', elLocal); return false; }
 
       if (datasOrdenadas.length === 0) {
         Swal.fire({
@@ -1660,15 +1742,22 @@
         if (!validarGeracaoPDF()) return;
 
         const atividade = document.getElementById('header-atividade').value.trim();
+        const fase = document.getElementById('header-fase-forca-tarefa').value.trim();
+        const estabelecimento = document.getElementById('header-estabelecimento').value.trim();
         const local = document.getElementById('header-local').value.trim();
+        const exibeFase = document.getElementById('grupo-fase-forca-tarefa').style.display !== 'none';
+        const exibeEndereco = document.getElementById('grupo-endereco').style.display !== 'none';
         const { agrupadosPorData, datasOrdenadas } = obterTodasAsCargasOrdenadas();
 
         const cleanAtividade = atividade.replace(/[\/\\\\:*?"<>|]/g, '-');
-        const cleanLocal = local.replace(/[\/\\\\:*?"<>|]/g, '-');
+        const cleanEstabelecimento = estabelecimento.replace(/[\/\\\\:*?"<>|]/g, '-');
         const dataInicioBR = datasOrdenadas[0].split('-').reverse().join('-');
         const dataFimBR = datasOrdenadas[datasOrdenadas.length - 1].split('-').reverse().join('-');
         const periodoStr = datasOrdenadas.length > 1 ? `${dataInicioBR}_A_${dataFimBR}` : dataInicioBR;
-        const nomeArquivo = `CONTROLE DE CARGAS - ${cleanAtividade.toUpperCase()} - ${cleanLocal.toUpperCase()} - ${periodoStr}.pdf`;
+        
+        const isForcaTarefa = normalizarTexto(atividade).includes('FORCA TAREFA');
+        const faseNoNome = (isForcaTarefa && fase) ? ` - FASE ${fase.toUpperCase()}` : '';
+        const nomeArquivo = `CONTROLE DE CARGAS - ${cleanAtividade.toUpperCase()}${faseNoNome} - ${cleanEstabelecimento.toUpperCase()} - ${periodoStr}.pdf`;
 
         Swal.fire({
             title: 'GERANDO PDF...',
@@ -1731,9 +1820,18 @@
 
             drawInfoBox(marginX, curY, cardWidth, 'NATUREZA DA FISCALIZAÇÃO:', atividade.toUpperCase());
             curY += 13;
-            drawInfoBox(marginX, curY, 120, 'LOCAL:', local.toUpperCase());
+            if (exibeFase) {
+                drawInfoBox(marginX, curY, cardWidth, 'FASE DA FORÇA TAREFA:', fase.toUpperCase());
+                curY += 13;
+            }
+            drawInfoBox(marginX, curY, cardWidth, 'ESTABELECIMENTO:', estabelecimento.toUpperCase());
+            curY += 13;
+            if (exibeEndereco) {
+                drawInfoBox(marginX, curY, cardWidth, 'ENDEREÇO:', local.toUpperCase());
+                curY += 13;
+            }
             const periodoExibicao = datasOrdenadas.length > 1 ? `${datasOrdenadas[0].split('-').reverse().join('/')} A ${datasOrdenadas[datasOrdenadas.length - 1].split('-').reverse().join('/')}` : datasOrdenadas[0].split('-').reverse().join('/');
-            drawInfoBox(138, curY, 58, 'PERÍODO / DATAS:', periodoExibicao);
+            drawInfoBox(marginX, curY, cardWidth, 'PERÍODO / DATAS:', periodoExibicao);
             curY += 18;
 
             pdf.setFont('helvetica', 'bold');
@@ -1873,7 +1971,9 @@
                 id: Date.now().toString(),
                 nome: nomeArquivo,
                 atividade: cleanAtividade.toUpperCase(),
-                local: cleanLocal.toUpperCase(),
+                estabelecimento: cleanEstabelecimento.toUpperCase(),
+                fase: isForcaTarefa ? fase.toUpperCase() : '',
+                local: local.toUpperCase(),
                 dataFiscalizacao: periodoExibicao,
                 dataGeracao: new Date().toLocaleString('pt-BR'),
                 timestamp: Date.now(),
@@ -1881,27 +1981,27 @@
                 dataUri: pdfDataUri
             });
 
-            pdf.save(nomeArquivo);
+            // pdf.save(nomeArquivo);
             const foiCompartilhado = await compartilharPDFGeradoWhatsApp(pdfBlob, nomeArquivo);
 
             Swal.close();
 
-            if (foiCompartilhado) {
-                 Swal.fire({
-                    icon: 'success',
-                    title: 'PDF GERADO E COMPARTILHADO!',
-                    text: 'O arquivo foi baixado e armazenado com sucesso no histórico da página.',
-                    confirmButtonColor: '#000000'
-                });
-            } else {
-                 Swal.fire({
-                    icon: 'success',
-                    title: 'PDF GERADO COM SUCESSO!',
-                    html: `O documento oficial foi gerado e salvo no histórico da aplicação.<br><br>
-                           <b>PARA ENVIAR:</b><br>Abra o WhatsApp e anexe o PDF gerado.`,
-                    confirmButtonColor: '#000000'
-                });
-            }
+          if (foiCompartilhado) {
+    Swal.fire({
+        icon: 'success',
+        title: 'PDF GERADO E COMPARTILHADO!',
+        text: 'O arquivo foi adicionado ao histórico da página.',
+        confirmButtonColor: '#000000'
+    });
+} else {
+    Swal.fire({
+        icon: 'success',
+        title: 'PDF GERADO COM SUCESSO!',
+        html: `O arquivo foi adicionado ao histórico da página.<br><br>
+               <b>PARA BAIXAR:</b> Utilize o botão "⬇️" no histórico de PDFs abaixo.`,
+        confirmButtonColor: '#000000'
+    });
+}
 
         } catch (error) {
             console.error('Erro ao gerar PDF:', error);
@@ -1938,12 +2038,22 @@
       if (!validarGeracaoPDF()) return;
 
       const atividade = document.getElementById('header-atividade').value.toUpperCase();
+      const fase = document.getElementById('header-fase-forca-tarefa').value.toUpperCase();
+      const estabelecimento = document.getElementById('header-estabelecimento').value.toUpperCase();
       const local = document.getElementById('header-local').value.toUpperCase();
+      const exibeFase = document.getElementById('grupo-fase-forca-tarefa').style.display !== 'none';
+      const exibeEndereco = document.getElementById('grupo-endereco').style.display !== 'none';
       const { agrupadosPorData, datasOrdenadas } = obterTodasAsCargasOrdenadas();
 
       let mensagem = `*RELATÓRIO DE CONTROLE DE CARGAS - DETRAN RJ*\n\n`;
       mensagem += `🧐 *FISCALIZAÇÃO:* ${atividade}\n`;
-      mensagem += `📍 *LOCAL:* ${local}\n`;
+      if (exibeFase) {
+          mensagem += `🪖 *FASE DA FORÇA TAREFA:* ${fase}\n`;
+      }
+      mensagem += `🏢 *ESTABELECIMENTO:* ${estabelecimento}\n`;
+      if (exibeEndereco) {
+          mensagem += `📍 *ENDEREÇO:* ${local}\n`;
+      }
 
       let totalGeral = 0;
       datasOrdenadas.forEach(d => totalGeral += agrupadosPorData[d].length);
@@ -1984,6 +2094,8 @@
         historico = historico.filter(item =>
           (item.nome && item.nome.toLowerCase().includes(termoBusca)) ||
           (item.atividade && item.atividade.toLowerCase().includes(termoBusca)) ||
+          (item.estabelecimento && item.estabelecimento.toLowerCase().includes(termoBusca)) ||
+          (item.fase && item.fase.toLowerCase().includes(termoBusca)) ||
           (item.local && item.local.toLowerCase().includes(termoBusca)) ||
           (item.dataFiscalizacao && item.dataFiscalizacao.toLowerCase().includes(termoBusca)) ||
           (item.dataGeracao && item.dataGeracao.toLowerCase().includes(termoBusca))
@@ -2000,7 +2112,7 @@
           <div class="pdf-card-info" onclick="abrirPDF('${item.id}')" title="CLIQUE AQUI PARA ABRIR O PDF">
             <span class="pdf-card-icon">📄</span>
             <div class="pdf-card-text">
-              <div class="pdf-card-title" title="${item.nome}">${item.atividade || 'CARGA'} - ${item.local || 'LOCAL'} - ${item.dataFiscalizacao || ''}</div>
+              <div class="pdf-card-title" title="${item.nome}">${item.estabelecimento ? item.estabelecimento + ' - ' : ''}${item.atividade || 'CARGA'}${item.fase ? ' - FASE ' + item.fase : ''} - ${item.dataFiscalizacao || ''}</div>
               <div class="pdf-card-meta">GERADO EM: ${item.dataGeracao}</div>
             </div>
           </div>
@@ -2016,16 +2128,36 @@
     async function abrirPDF(id) {
       const pdfObj = await dbObterPDFPorId(id);
       if (pdfObj) {
-        let url = '';
-        if (pdfObj.blob) {
-          url = URL.createObjectURL(pdfObj.blob);
-        } else if (pdfObj.dataUri) {
-          url = pdfObj.dataUri;
+        try {
+          let blob = pdfObj.blob;
+          if (!blob && pdfObj.dataUri) {
+            const byteString = atob(pdfObj.dataUri.split(',')[1]);
+            const mimeString = pdfObj.dataUri.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+            }
+            blob = new Blob([ab], { type: mimeString || 'application/pdf' });
+          }
+
+          if (blob) {
+            const blobUrl = URL.createObjectURL(blob);
+            const win = window.open(blobUrl, '_blank');
+            if (!win) {
+              window.location.href = blobUrl;
+            }
+            return;
+          }
+        } catch (e) {
+          console.error("Erro ao abrir diretamente:", e);
         }
 
-        if (url) {
-          const win = window.open(url, '_blank');
-          if (!win) {
+        if (pdfObj.dataUri) {
+          const win = window.open();
+          if (win) {
+            win.document.write(`<iframe src="${pdfObj.dataUri}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+          } else {
             Swal.fire({
               icon: 'warning',
               title: 'BLOQUEADOR DE POP-UP DETECTADO',
