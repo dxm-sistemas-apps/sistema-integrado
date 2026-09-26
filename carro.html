@@ -150,6 +150,35 @@
                 padding: 0 !important;
                 text-align: center !important;
             }
+            /* Botões direcionais flutuantes */
+.btn-scroll-nav {
+    position: fixed;
+    right: 18px;
+    z-index: 999;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #0f172a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform 0.2s, background-color 0.2s;
+}
+.btn-scroll-nav:hover {
+    background-color: #1e293b;
+    transform: scale(1.08);
+}
+.btn-scroll-down {
+    top: 100px;
+}
+.btn-scroll-up {
+    bottom: 24px;
+}
         }
     </style>
 </head>
@@ -161,6 +190,14 @@
 
 <body class="bg-[#f1f5f9] text-gray-800 font-sans min-h-screen antialiased pb-12">
 
+    <!-- Botões de navegação rápida (Topo / Final) -->
+<button type="button" class="btn-scroll-nav btn-scroll-down no-print" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })" title="Rolar para o final da página">
+    ↓
+</button>
+<button type="button" class="btn-scroll-nav btn-scroll-up no-print" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" title="Rolar para o topo da página">
+    ↑
+</button>
+    
     <!-- HEADER PADRONIZADO -->
     <header class="bg-gray-900 text-white shadow-md">
         <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col items-center justify-center text-center">
@@ -1337,12 +1374,16 @@ function gerarPDFPersonalizado() {
 
             Swal.close();
 
-           if (foiCompartilhado) {
+           // Substitua o final do bloco de sucesso por:
+if (foiCompartilhado) {
     Swal.fire({
         icon: 'success',
         title: 'PDF GERADO E COMPARTILHADO!',
         html: '<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.',
         confirmButtonColor: '#000000'
+    }).then(() => {
+        limparTabelaDireto();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
 } else {
     Swal.fire({
@@ -1351,7 +1392,39 @@ function gerarPDFPersonalizado() {
         html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.<br><br>
                <b>PARA BAIXAR:</b> UTILIZE O BOTÃO "⬇️" NO HISTÓRICO DE PDFS ABAIXO.`,
         confirmButtonColor: '#000000'
+    }).then(() => {
+        limparTabelaDireto();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
+}
+
+function limparTabelaDireto() {
+    localStorage.removeItem('rascunho_carro');
+    dadosAgregadosPorModo = {
+        "etiquetada": { "kit-code-etq": "", "motor-completo-etq": "", "radiador-completo-etq": "" },
+        "nao-etiquetada": { "kit-code-netq": "", "motor-completo-netq": "", "radiador-completo-netq": "" },
+        "completa": { 
+            "kit-code-etq": "", "motor-completo-etq": "", "radiador-completo-etq": "",
+            "kit-code-netq": "", "motor-completo-netq": "", "radiador-completo-netq": "" 
+        }
+    };
+    document.getElementById('info-natureza').value = "";
+    document.getElementById('tipo-preenchimento').value = "";
+    document.getElementById('container-agregados').classList.add('hidden');
+    document.getElementById('btn-processar-agregados').classList.add('hidden');
+    document.getElementById('agregados-grid').innerHTML = '';
+    document.querySelectorAll('input').forEach(input => {
+        input.value = ''; 
+        input.classList.remove('preenchido');
+    });
+    document.querySelectorAll('canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    document.getElementById('total-etiquetadas').innerText = '0';
+    document.getElementById('total-nao-etiquetadas').innerText = '0';
+    document.getElementById('total-est-fisico').innerText = '0';
+    atualizarColunas();
 }
 
         } catch (error) {

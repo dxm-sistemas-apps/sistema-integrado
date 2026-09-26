@@ -51,10 +51,10 @@
         .pdf-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--text-muted); pointer-events: none; }
         .pdf-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .pdf-card { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #f9fafb; border: 1px solid var(--border-color); border-radius: var(--radius); padding: 10px 12px; }
-        .pdf-card-info { display: flex; align-items: center; gap: 10px; overflow: hidden; cursor: pointer; }
+        .pdf-card-info { display: flex; align-items: center; gap: 10px; overflow: hidden; cursor: pointer; flex: 1; min-width: 0; }
         .pdf-card-icon { font-size: 1.6rem; flex-shrink: 0; }
-        .pdf-card-text { overflow: hidden; }
-        .pdf-card-title { font-size: 0.8rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pdf-card-text { overflow: hidden; min-width: 0; width: 100%; }
+        .pdf-card-title { font-size: 0.8rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; word-break: break-word; overflow-wrap: break-word; white-space: normal; }
         .pdf-card-meta { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
         .pdf-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
         .btn-icon-pdf { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 4px 6px; border-radius: 4px; transition: background 0.15s; }
@@ -855,6 +855,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     executeClearAllForm();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
@@ -897,7 +898,12 @@
 
             const element = document.getElementById('pdfContent');
             const razaoSocial = document.getElementById('inputRazaoSocial').value.trim() || 'TERMO';
-            const nomeArquivo = `TERMO DE TREINAMENTO_DESMONTE.RJ - ${razaoSocial.replace(/\s+/g, '_')}.pdf`;
+            const cnpjVal = document.getElementById('inputCNPJ').value.trim();
+            const dataInput = document.getElementById('inputDataTermo').value;
+            const dataFormatada = dataInput ? dataInput.split('-').reverse().join('/') : '';
+            const dataArquivo = dataInput ? dataInput.split('-').reverse().join('-') : '';
+            
+            const nomeArquivo = `TERMO DE TREINAMENTO DESMONTE.RJ - ${razaoSocial.toUpperCase()} - ${dataArquivo}.pdf`;
 
             Swal.fire({
                 title: 'GERANDO PDF...',
@@ -924,35 +930,41 @@
 
             try {
                 const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = nomeArquivo;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-
                 const uri = await blobToDataURI(blob);
+                
                 salvarPDFHistorico({
                     id: Date.now(),
                     nome: nomeArquivo,
                     empresa: razaoSocial.toUpperCase(),
-                    cnpj: document.getElementById('inputCNPJ').value,
-                    data: document.getElementById('inputDataTermo').value ? document.getElementById('inputDataTermo').value.split('-').reverse().join('-') : '',
+                    cnpj: cnpjVal,
+                    data: dataFormatada,
                     dataGeracao: new Date().toLocaleString('pt-BR'),
                     timestamp: Date.now(),
                     dataUri: uri
                 });
 
-                await compartilharPDFGeradoWhatsApp(blob, nomeArquivo);
+                const foiCompartilhado = await compartilharPDFGeradoWhatsApp(blob, nomeArquivo);
+
+                Swal.close();
+
+                const tituloSucesso = foiCompartilhado ? 'PDF GERADO E COMPARTILHADO!' : 'PDF GERADO COM SUCESSO!';
+                const textoSucesso = foiCompartilhado 
+                    ? '<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.'
+                    : `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.<br><br>
+                       <b>PARA BAIXAR:</b> UTILIZE O BOTÃO "👁️" OU VISUALIZE NO HISTÓRICO ABAIXO.`;
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'PDF GERADO COM SUCESSO!',
-                    text: 'ATENÇÃO, O ARQUIVO FOI GERADO E ADICIONADO AO HISTÓRICO NO FINAL DA PÁGINA.',
+                    title: tituloSucesso,
+                    html: textoSucesso,
                     confirmButtonColor: '#000000'
+                }).then(() => {
+                    executeClearAllForm();
+                    setTimeout(() => {
+                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    }, 100);
                 });
+
             } catch (error) {
                 console.error(error);
                 Swal.fire({
@@ -1020,12 +1032,13 @@
                   <div class="pdf-card-info" onclick="abrirPDF('${item.id}')" title="CLIQUE AQUI PARA ABRIR O PDF">
                     <span class="pdf-card-icon">📄</span>
                     <div class="pdf-card-text">
-                      <div class="pdf-card-title" title="${item.nome || ''}">${item.empresa || item.nome || ''} - CNPJ: ${item.cnpj || ''} - TERMO DE TREINAMENTO</div>
+                      <div class="pdf-card-title" title="${item.nome || ''}">TERMO DE TREINAMENTO DESMONTE.RJ - ${item.empresa || ''}${item.cnpj ? ' - CNPJ: ' + item.cnpj : ''} - ${item.data || ''}</div>
                       <div class="pdf-card-meta">GERADO EM: ${item.dataGeracao || ''}</div>
                     </div>
                   </div>
                   <div class="pdf-card-actions">
                     <button class="btn-icon-pdf" onclick="abrirPDF('${item.id}')" title="ABRIR / VISUALIZAR PDF">👁️</button>
+                    <button class="btn-icon-pdf" onclick="baixarPDFHistorico('${item.id}')" title="BAIXAR PDF">⬇️</button>
                     <button class="btn-icon-pdf" onclick="excluirPDF('${item.id}')" title="EXCLUIR PDF">🗑️</button>
                   </div>
                 </div>
@@ -1048,6 +1061,19 @@
                     });
                 }
             }
+        }
+
+        function baixarPDFHistorico(id) {
+            const h = JSON.parse(localStorage.getItem('historico_pdfs_suporte')) || [];
+            const p = h.find(i => String(i.id) === String(id));
+            if (!p || !p.dataUri) return;
+
+            const link = document.createElement('a');
+            link.href = p.dataUri;
+            link.download = p.nome || 'termo-treinamento.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function excluirPDF(id) {
@@ -1088,19 +1114,14 @@
                         title: nomeArquivo,
                         text: 'PDF gerado pelo Sistema Desmonte.RJ.'
                     });
-                } else {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'PDF SALVO NO DISPOSITIVO',
-                        text: 'ATENÇÃO, O ARQUIVO FOI SALVO, MAS ANEXE-O MANUALMENTE NO WHATSAPP SE NECESSÁRIO.',
-                        confirmButtonColor: '#000000'
-                    });
+                    return true;
                 }
             } catch (e) {
                 if (e.name !== 'AbortError') {
                     console.warn(e);
                 }
             }
+            return false;
         }
     </script>
 </body>

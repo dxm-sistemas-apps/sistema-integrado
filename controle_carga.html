@@ -6,6 +6,8 @@
   <title>CONTROLE DE CARGAS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <style>
     :root {
       --bg-color: #f4f5f7;
@@ -69,6 +71,7 @@
     input[type="text"],
     input[type="date"],
     input[type="time"],
+    input[type="number"],
     select {
       width: 100%;
       padding: 10px 12px;
@@ -463,6 +466,8 @@
       gap: 10px;
       overflow: hidden;
       cursor: pointer;
+      flex: 1;
+      min-width: 0;
     }
 
     .pdf-card-icon {
@@ -472,6 +477,8 @@
 
     .pdf-card-text {
       overflow: hidden;
+      min-width: 0;
+      width: 100%;
     }
 
     .pdf-card-title {
@@ -479,9 +486,9 @@
       font-weight: 800;
       color: var(--primary-dark);
       text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
 
     .pdf-card-meta {
@@ -552,9 +559,6 @@
       #conteudo-principal { border: none !important; box-shadow: none !important; }
     }
   </style>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body class="bg-[#f1f5f9] text-gray-800 font-sans min-h-screen antialiased pb-12">
@@ -1738,6 +1742,28 @@
       });
     }
 
+    function limparAposGeracao() {
+      registros = [];
+      relatoriosParciais = [];
+      localStorage.removeItem(STORAGE_KEYS.REGISTROS);
+      localStorage.removeItem(STORAGE_KEYS.PARCIAIS);
+      document.getElementById('header-atividade').value = '';
+      document.getElementById('header-fase-forca-tarefa').value = '';
+      document.getElementById('header-estabelecimento').value = '';
+      document.getElementById('header-local').value = '';
+      document.getElementById('header-data').value = '';
+      atualizarCamposNatureza();
+      saveHeaderData();
+      resetFormState();
+      loadFormDraft();
+      renderRegistros();
+      renderRelatoriosParciais();
+      validarEstadoBotoesData();
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 100);
+    }
+
     async function gerarPDFPersonalizado() {
         if (!validarGeracaoPDF()) return;
 
@@ -1981,27 +2007,30 @@
                 dataUri: pdfDataUri
             });
 
-            // pdf.save(nomeArquivo);
             const foiCompartilhado = await compartilharPDFGeradoWhatsApp(pdfBlob, nomeArquivo);
 
             Swal.close();
 
-          if (foiCompartilhado) {
-    Swal.fire({
-        icon: 'success',
-        title: 'PDF GERADO E COMPARTILHADO!',
-        text: 'O arquivo foi adicionado ao histórico da página.',
-        confirmButtonColor: '#000000'
-    });
-} else {
-    Swal.fire({
-        icon: 'success',
-        title: 'PDF GERADO COM SUCESSO!',
-        html: `O arquivo foi adicionado ao histórico da página.<br><br>
-               <b>PARA BAIXAR:</b> Utilize o botão "⬇️" no histórico de PDFs abaixo.`,
-        confirmButtonColor: '#000000'
-    });
-}
+            if (foiCompartilhado) {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'PDF GERADO E COMPARTILHADO!',
+                  text: 'O arquivo foi adicionado ao histórico da página.',
+                  confirmButtonColor: '#000000'
+              }).then(() => {
+                  limparAposGeracao();
+              });
+            } else {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'PDF GERADO COM SUCESSO!',
+                  html: `O arquivo foi adicionado ao histórico da página.<br><br>
+                         <b>PARA BAIXAR:</b> Utilize o botão "⬇️" no histórico de PDFs abaixo.`,
+                  confirmButtonColor: '#000000'
+              }).then(() => {
+                  limparAposGeracao();
+              });
+            }
 
         } catch (error) {
             console.error('Erro ao gerar PDF:', error);
@@ -2112,7 +2141,7 @@
           <div class="pdf-card-info" onclick="abrirPDF('${item.id}')" title="CLIQUE AQUI PARA ABRIR O PDF">
             <span class="pdf-card-icon">📄</span>
             <div class="pdf-card-text">
-              <div class="pdf-card-title" title="${item.nome}">${item.estabelecimento ? item.estabelecimento + ' - ' : ''}${item.atividade || 'CARGA'}${item.fase ? ' - FASE ' + item.fase : ''} - ${item.dataFiscalizacao || ''}</div>
+              <div class="pdf-card-title" title="${item.nome}">${item.atividade || 'CONTROLE DE CARGAS'}${item.fase ? ' - FASE ' + item.fase : ''}${item.estabelecimento ? ' - ' + item.estabelecimento : ''} - ${item.dataFiscalizacao || ''}</div>
               <div class="pdf-card-meta">GERADO EM: ${item.dataGeracao}</div>
             </div>
           </div>

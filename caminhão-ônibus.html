@@ -1363,6 +1363,9 @@ if (foiCompartilhado) {
         title: 'PDF GERADO E COMPARTILHADO!',
         html: '<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.',
         confirmButtonColor: '#000000'
+    }).then(() => {
+        limparTabelaDireto();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
 } else {
     Swal.fire({
@@ -1371,7 +1374,36 @@ if (foiCompartilhado) {
         html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DA PÁGINA.<br><br>
                <b>PARA BAIXAR:</b> UTILIZE O BOTÃO "⬇️" NO HISTÓRICO DE PDFS ABAIXO.`,
         confirmButtonColor: '#000000'
+    }).then(() => {
+        limparTabelaDireto();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
+}
+
+function limparTabelaDireto() {
+    localStorage.removeItem('rascunho_moto');
+    dadosAgregadosPorModo = {
+        "etiquetada": { "motor-completo-etq": "" },
+        "nao-etiquetada": { "motor-completo-netq": "" },
+        "completa": { "motor-completo-etq": "", "motor-completo-netq": "" }
+    };
+    document.getElementById('info-natureza').value = "";
+    document.getElementById('tipo-preenchimento').value = "";
+    document.getElementById('container-agregados').classList.add('hidden');
+    document.getElementById('btn-processar-agregados').classList.add('hidden');
+    document.getElementById('agregados-grid').innerHTML = '';
+    document.querySelectorAll('input').forEach(input => {
+        input.value = ''; 
+        input.classList.remove('preenchido');
+    });
+    document.querySelectorAll('canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    document.getElementById('total-etiquetadas').innerText = '0';
+    document.getElementById('total-nao-etiquetadas').innerText = '0';
+    document.getElementById('total-est-fisico').innerText = '0';
+    atualizarColunas();
 }
         } catch (error) {
             console.error('Erro ao gerar PDF:', error);
