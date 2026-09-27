@@ -1316,7 +1316,7 @@ function gerarPDFPersonalizado() {
                 sigY = 20;
             }
 
-            drawSig(61, sigY, sigWidth, 'REPRESENTANTE DA EMPRESA', 'sig-empresa', repFields);
+            drawSig(61, sigY, sigWidth, 'REPRESENTANTE DA EMPRESA / ESTABELECIMENTO', 'sig-empresa', repFields);
 
             const pdfDataUri = pdf.output('datauristring');
             const pdfBlob = pdf.output('blob');
@@ -1353,8 +1353,8 @@ if (foiCompartilhado) {
     Swal.fire({
         icon: 'success',
         title: 'PDF GERADO COM SUCESSO!',
-        html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF´S GERADOS.',
-               <b>PARA BAIXAR:</b> UTILIZE O BOTÃO "⬇️" NO HISTÓRICO DE PDFS ABAIXO.`,
+        html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF´S GERADOS.
+               <b>PARA FAZER O DOWNLOAD,</b> UTILIZE O BOTÃO "⬇️" NO HISTÓRICO DE PDF´S ABAIXO.`,
         confirmButtonColor: '#000000'
     }).then(() => {
         limparTabelaDireto();
