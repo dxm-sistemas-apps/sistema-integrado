@@ -1176,7 +1176,7 @@ function gerarPDFPersonalizado() {
                 pdf.text(value, x + 3, yPos + 9);
             };
 
-            drawInfoBox(14, y, 130, 'NATUREZA DA FISCALIZAÇÃO:', nomeNatu.toUpperCase());
+            drawInfoBox(14, y, 130, 'NATUREZA DA ATIVIDADE:', nomeNatu.toUpperCase());
             drawInfoBox(148, y, 48, 'DATA:', dataFormatada);
             y += 13;
             if (exibeFase) {
@@ -1184,7 +1184,7 @@ function gerarPDFPersonalizado() {
                 y += 13;
             }
             if (exibeEstab) {
-                drawInfoBox(14, y, 182, 'ESTABELECIMENTO:', nomeEstab.toUpperCase());
+                drawInfoBox(14, y, 182, 'EMPRESA / ESTABELECIMENTO:', nomeEstab.toUpperCase());
                 y += 13;
             }
             if (exibeEndereco) {
@@ -1343,7 +1343,7 @@ if (foiCompartilhado) {
     Swal.fire({
         icon: 'success',
         title: 'PDF GERADO E COMPARTILHADO!',
-        html: '<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF'S GERADOS.',
+        html: '<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF´S GERADOS.',
         confirmButtonColor: '#000000'
     }).then(() => {
         limparTabelaDireto();
@@ -1353,7 +1353,7 @@ if (foiCompartilhado) {
     Swal.fire({
         icon: 'success',
         title: 'PDF GERADO COM SUCESSO!',
-        html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF'S GERADOS.<br><br>
+        html: `<span class="text-amber-500 font-bold">ATENÇÃO:</span> O ARQUIVO FOI ADICIONADO AO HISTÓRICO DE PDF´S GERADOS.',
                <b>PARA BAIXAR:</b> UTILIZE O BOTÃO "⬇️" NO HISTÓRICO DE PDFS ABAIXO.`,
         confirmButtonColor: '#000000'
     }).then(() => {
