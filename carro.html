@@ -841,7 +841,7 @@ function validarFormulario(acaoSucesso = null) {
 
     const grupoEndereco = document.getElementById('grupo-endereco');
     if (grupoEndereco && grupoEndereco.style.display !== 'none') {
-        campos.push({ id: 'info-endereco', msg: 'ENDEREÇO' });
+        campos.push({ id: 'info-endereco', msg: 'ENDEREÇO DA EMPRESA / ESTABELECIMENTO' });
     }
 
     for (let i = 0; i < campos.length; i++) {
@@ -873,8 +873,8 @@ function validarFormulario(acaoSucesso = null) {
         }
     }
 
-    if (isCanvasEmpty('sig-agente1')) { mostrarAlertaAviso('ASSINATURA FALTANDO', '<span class="text-amber-500 font-bold">ATENÇÃO:</span> A ASSINATURA DO <br><b style="font-size:18px; color:#E53935;">"AGENTE 1"</b> É OBRIGATÓRIA!', document.getElementById('sig-agente1')); return; }
-    if (isCanvasEmpty('sig-agente2')) { mostrarAlertaAviso('ASSINATURA FALTANDO', '<span class="text-amber-500 font-bold">ATENÇÃO:</span> A ASSINATURA DO <br><b style="font-size:18px; color:#E53935;">"AGENTE 2"</b> É OBRIGATÓRIA!', document.getElementById('sig-agente2')); return; }
+    if (isCanvasEmpty('sig-agente1')) { mostrarAlertaAviso('ASSINATURA FALTANDO', '<span class="text-amber-500 font-bold">ATENÇÃO:</span> A ASSINATURA DO <br><b style="font-size:18px; color:#E53935;">"AGENTE"</b> É OBRIGATÓRIA!', document.getElementById('sig-agente1')); return; }
+    if (isCanvasEmpty('sig-agente2')) { mostrarAlertaAviso('ASSINATURA FALTANDO', '<span class="text-amber-500 font-bold">ATENÇÃO:</span> A ASSINATURA DO <br><b style="font-size:18px; color:#E53935;">"AGENTE"</b> É OBRIGATÓRIA!', document.getElementById('sig-agente2')); return; }
     if (isCanvasEmpty('sig-empresa')) { mostrarAlertaAviso('ASSINATURA FALTANDO', '<span class="text-amber-500 font-bold">ATENÇÃO:</span> A ASSINATURA DO <br><b style="font-size:18px; color:#e11d48;">"REPRESENTANTE DA EMPRESA / ESTABELECIMENTO"</b> É OBRIGATÓRIA!', document.getElementById('sig-empresa')); return; }
 
     if (typeof acaoSucesso === 'function') {
@@ -901,7 +901,7 @@ function compartilharPDFWhatsApp() {
             ? "EMPRESA EM EVOLUÇÃO DE PEÇAS CADASTRADAS" 
             : "EMPRESA COM DÉFICIT DE PEÇAS CADASTRADAS";
 
-        let mensagem = `*ITENS DE RASTREABILIDADE - CARRO*\n\n`;
+        let mensagem = `*ITENS DE RASTREABILIDADE DE CARRO*\n\n`;
         mensagem += `🧐 *NATUREZA DA ATIVIDADE:* ${natureza}\n`;
         if (document.getElementById('grupo-fase-forca-tarefa').style.display !== 'none') {
             mensagem += `🪖 *FASE DA FORÇA TAREFA:* ${fase}\n`;
